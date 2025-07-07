@@ -1,8 +1,6 @@
-
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useQuiz } from '@/hooks/useQuiz';
-import { playHoverSound, playClickSound } from '@/utils/soundUtils';
 import StartScreen from './quiz/StartScreen';
 import TestSelection from './quiz/TestSelection';
 import ResultsScreen from './quiz/ResultsScreen';
@@ -62,12 +60,7 @@ const MCUQuiz: React.FC = () => {
     }
   };
 
-  const handleOptionHover = () => {
-    playHoverSound();
-  };
-
   const handleOptionClick = (index: number) => {
-    playClickSound();
     quiz.selectAnswer(index);
   };
 
@@ -169,7 +162,6 @@ const MCUQuiz: React.FC = () => {
                 <button
                   key={index}
                   onClick={() => handleOptionClick(index)}
-                  onMouseEnter={handleOptionHover}
                   disabled={isAnswered}
                   className={buttonClass}
                 >
