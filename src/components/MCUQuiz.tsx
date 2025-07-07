@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
@@ -24,309 +23,414 @@ const MCUQuiz: React.FC = () => {
 
   const questions: Question[] = [
     {
-      question: "What is the real name of Iron Man?",
-      options: ["Tony Stark", "Bruce Wayne", "Peter Parker", "Steve Rogers"],
-      correct: 0,
-      explanation: "Tony Stark is the genius billionaire who becomes Iron Man using his advanced suit of armor."
-    },
-    {
-      question: "Which Infinity Stone is hidden on Vormir?",
-      options: ["Power Stone", "Soul Stone", "Reality Stone", "Mind Stone"],
-      correct: 1,
-      explanation: "The Soul Stone is located on Vormir and requires a soul sacrifice to obtain it."
-    },
-    {
-      question: "Who is the Winter Soldier?",
-      options: ["Sam Wilson", "Bucky Barnes", "John Walker", "Isaiah Bradley"],
-      correct: 1,
-      explanation: "Bucky Barnes, Steve Rogers' childhood friend, becomes the Winter Soldier after being brainwashed by HYDRA."
-    },
-    {
-      question: "What is the name of Thor's hammer?",
-      options: ["Stormbreaker", "Gungnir", "Mjolnir", "Hofund"],
-      correct: 2,
-      explanation: "Mjolnir is Thor's enchanted hammer that can only be lifted by those who are worthy."
-    },
-    {
-      question: "Which planet is Thanos from?",
-      options: ["Asgard", "Titan", "Xandar", "Sakaar"],
-      correct: 1,
-      explanation: "Thanos is from Titan, a moon of Saturn that was destroyed due to overpopulation."
-    },
-    {
-      question: "What does S.H.I.E.L.D. stand for?",
+      question: "What does the command `chmod 755 filename` do?",
       options: [
-        "Strategic Homeland Intervention, Enforcement and Logistics Division",
-        "Supreme Headquarters, International Espionage and Law-Enforcement Division",
-        "Strategic Hazard Intervention Espionage Logistics Directorate",
-        "Special Headquarters for International Emergency and Defense"
+        "Gives read, write, and execute permission to everyone",
+        "Sets file permission to read and write only for the owner",
+        "Gives full permission to owner, and read/execute to others",
+        "Removes execute permission from the owner"
+      ],
+      correct: 2,
+      explanation: "755 gives rwx (7) to owner, rx (5) to group, and rx (5) to others."
+    },
+    {
+      question: "Which command is used to display the current working directory?",
+      options: ["cd", "pwd", "ls", "whoami"],
+      correct: 1,
+      explanation: "pwd (print working directory) shows the current directory path."
+    },
+    {
+      question: "What does the `grep` command do?",
+      options: [
+        "Creates a new file",
+        "Searches for patterns in files",
+        "Copies files to another location",
+        "Changes file permissions"
+      ],
+      correct: 1,
+      explanation: "grep searches for text patterns within files and outputs matching lines."
+    },
+    {
+      question: "Which signal does `kill -9` send to a process?",
+      options: ["SIGTERM", "SIGKILL", "SIGINT", "SIGHUP"],
+      correct: 1,
+      explanation: "kill -9 sends SIGKILL, which forcefully terminates a process."
+    },
+    {
+      question: "What is the default shell in most Linux distributions?",
+      options: ["csh", "zsh", "bash", "fish"],
+      correct: 2,
+      explanation: "bash (Bourne Again Shell) is the default shell in most Linux distributions."
+    },
+    {
+      question: "Which command shows running processes?",
+      options: ["ls", "ps", "df", "du"],
+      correct: 1,
+      explanation: "ps displays information about running processes."
+    },
+    {
+      question: "What does `sudo` stand for?",
+      options: [
+        "Super User Do",
+        "Switch User Do",
+        "System User Do",
+        "Substitute User Do"
+      ],
+      correct: 3,
+      explanation: "sudo stands for 'substitute user do' or 'switch user do'."
+    },
+    {
+      question: "Which file contains user account information?",
+      options: ["/var/log/syslog", "/etc/passwd", "/etc/shadow", "/etc/group"],
+      correct: 1,
+      explanation: "/etc/passwd contains user account information like username, UID, GID, etc."
+    },
+    {
+      question: "What does the `tar` command do?",
+      options: [
+        "Archives files into a single file",
+        "Transfers files over network",
+        "Tracks file changes",
+        "Terminates running processes"
       ],
       correct: 0,
-      explanation: "S.H.I.E.L.D. stands for Strategic Homeland Intervention, Enforcement and Logistics Division."
+      explanation: "tar (tape archive) is used to archive multiple files into a single file."
     },
     {
-      question: "Who killed Tony Stark's parents?",
-      options: ["Red Skull", "Winter Soldier", "Loki", "Ultron"],
+      question: "Which command displays disk usage of directories?",
+      options: ["df", "du", "ls -l", "fdisk"],
       correct: 1,
-      explanation: "The Winter Soldier (Bucky Barnes) killed Howard and Maria Stark while under HYDRA's control."
+      explanation: "du (disk usage) shows the disk space used by directories and files."
     },
     {
-      question: "What is Black Widow's real name?",
-      options: ["Natasha Romanoff", "Wanda Maximoff", "Carol Danvers", "Yelena Belova"],
-      correct: 0,
-      explanation: "Natasha Romanoff is the real name of Black Widow, a former Russian spy turned Avenger."
-    },
-    {
-      question: "Which Infinity Stone does Vision have in his forehead?",
-      options: ["Time Stone", "Mind Stone", "Power Stone", "Soul Stone"],
-      correct: 1,
-      explanation: "Vision has the Mind Stone embedded in his forehead, which gives him consciousness and power."
-    },
-    {
-      question: "What is the name of the Asgardian bridge?",
-      options: ["Rainbow Bridge", "Bifrost", "Heimdall's Bridge", "Odin's Path"],
-      correct: 1,
-      explanation: "The Bifrost is the rainbow bridge that connects Asgard to the other Nine Realms."
-    },
-    {
-      question: "Who becomes the new Captain America after Steve Rogers?",
-      options: ["Bucky Barnes", "John Walker", "Sam Wilson", "Isaiah Bradley"],
+      question: "What is the root directory in Linux?",
+      options: ["/root", "/home", "/", "/usr"],
       correct: 2,
-      explanation: "Sam Wilson (Falcon) becomes the new Captain America after Steve Rogers passes the shield to him."
+      explanation: "/ is the root directory - the top-level directory in Linux file system."
     },
     {
-      question: "What is the name of Peter Quill's ship?",
-      options: ["Milano", "Benatar", "Dark Aster", "The Sanctuary"],
+      question: "Which command is used to create a hard link?",
+      options: ["ln", "link", "cp", "mv"],
       correct: 0,
-      explanation: "Peter Quill's ship is called the Milano, named after actress Alyssa Milano."
+      explanation: "ln creates hard links between files (ln -s creates symbolic links)."
     },
     {
-      question: "Which realm is Loki from?",
-      options: ["Asgard", "Midgard", "Jotunheim", "Alfheim"],
+      question: "What does `crontab -e` do?",
+      options: [
+        "Edits the cron table for scheduling tasks",
+        "Executes cron jobs immediately",
+        "Enables cron service",
+        "Exports cron configuration"
+      ],
+      correct: 0,
+      explanation: "crontab -e opens the cron table for editing scheduled tasks."
+    },
+    {
+      question: "Which command shows network connections?",
+      options: ["netstat", "ping", "wget", "ssh"],
+      correct: 0,
+      explanation: "netstat displays network connections, routing tables, and network statistics."
+    },
+    {
+      question: "What does the `umask` command control?",
+      options: [
+        "User mask for login",
+        "Default file permissions",
+        "Memory usage mask",
+        "Network subnet mask"
+      ],
+      correct: 1,
+      explanation: "umask sets the default permissions for newly created files and directories."
+    },
+    {
+      question: "Which command compresses files using gzip?",
+      options: ["compress", "zip", "gzip", "tar"],
       correct: 2,
-      explanation: "Loki is actually from Jotunheim, the realm of the Frost Giants, though he was raised in Asgard."
+      explanation: "gzip compresses files using the gzip compression algorithm."
     },
     {
-      question: "What is Hawkeye's real name?",
-      options: ["Jeremy Renner", "Clint Barton", "Phil Coulson", "Scott Lang"],
+      question: "What is the purpose of `/etc/hosts` file?",
+      options: [
+        "Store user passwords",
+        "Map hostnames to IP addresses",
+        "Configure network interfaces",
+        "Store system logs"
+      ],
       correct: 1,
-      explanation: "Clint Barton is Hawkeye's real name, a skilled archer and marksman."
+      explanation: "/etc/hosts maps hostnames to IP addresses for local name resolution."
     },
     {
-      question: "Who is the leader of the Guardians of the Galaxy?",
-      options: ["Rocket", "Gamora", "Star-Lord", "Drax"],
+      question: "Which command mounts a filesystem?",
+      options: ["mount", "fsck", "fdisk", "mkfs"],
+      correct: 0,
+      explanation: "mount attaches a filesystem to the directory tree."
+    },
+    {
+      question: "What does `awk` do?",
+      options: [
+        "Archives files",
+        "Processes text and data",
+        "Manages packages",
+        "Configures network"
+      ],
+      correct: 1,
+      explanation: "awk is a programming language for processing text and data extraction."
+    },
+    {
+      question: "Which command shows system memory usage?",
+      options: ["mem", "free", "ram", "memory"],
+      correct: 1,
+      explanation: "free displays the amount of free and used memory in the system."
+    },
+    {
+      question: "What does `sed` command do?",
+      options: [
+        "Secure delete files",
+        "Stream editor for filtering and transforming text",
+        "System editor",
+        "Set environment variables"
+      ],
+      correct: 1,
+      explanation: "sed is a stream editor for filtering and transforming text."
+    },
+    {
+      question: "Which file contains user group information?",
+      options: ["/etc/passwd", "/etc/group", "/etc/shadow", "/etc/users"],
+      correct: 1,
+      explanation: "/etc/group contains information about user groups."
+    },
+    {
+      question: "What does the `which` command do?",
+      options: [
+        "Shows which user is logged in",
+        "Locates a command in PATH",
+        "Shows which files are open",
+        "Displays system information"
+      ],
+      correct: 1,
+      explanation: "which locates the executable file associated with a command in PATH."
+    },
+    {
+      question: "Which command changes file ownership?",
+      options: ["chmod", "chown", "chgrp", "attr"],
+      correct: 1,
+      explanation: "chown changes the ownership of files and directories."
+    },
+    {
+      question: "What does `tail -f` do?",
+      options: [
+        "Shows the last 10 lines of a file",
+        "Follows a file as it grows",
+        "Finds files by name",
+        "Fixes file permissions"
+      ],
+      correct: 1,
+      explanation: "tail -f continuously displays new lines as they are added to a file."
+    },
+    {
+      question: "Which command creates a new directory?",
+      options: ["makedir", "mkdir", "newdir", "createdir"],
+      correct: 1,
+      explanation: "mkdir (make directory) creates new directories."
+    },
+    {
+      question: "What does `uptime` command show?",
+      options: [
+        "System uptime and load average",
+        "User login time",
+        "Process runtime",
+        "Network uptime"
+      ],
+      correct: 0,
+      explanation: "uptime shows how long the system has been running and load averages."
+    },
+    {
+      question: "Which command removes empty directories?",
+      options: ["rm", "rmdir", "delete", "remove"],
+      correct: 1,
+      explanation: "rmdir removes empty directories (rm -r removes directories with contents)."
+    },
+    {
+      question: "What does `wc` command do?",
+      options: [
+        "Word count - counts lines, words, and characters",
+        "Web crawler",
+        "Window control",
+        "Write cache"
+      ],
+      correct: 0,
+      explanation: "wc (word count) counts lines, words, and characters in files."
+    },
+    {
+      question: "Which command displays the end of a file?",
+      options: ["head", "tail", "end", "bottom"],
+      correct: 1,
+      explanation: "tail displays the last part of a file (head shows the beginning)."
+    },
+    {
+      question: "What is the difference between hard link and soft link?",
+      options: [
+        "Hard links can cross filesystems, soft links cannot",
+        "Soft links can cross filesystems, hard links cannot",
+        "Both are identical",
+        "Hard links are faster than soft links"
+      ],
+      correct: 1,
+      explanation: "Soft links (symbolic links) can cross filesystems, hard links cannot."
+    },
+    {
+      question: "Which command displays running processes in real-time?",
+      options: ["ps", "top", "jobs", "bg"],
+      correct: 1,
+      explanation: "top displays running processes in real-time with system resource usage."
+    },
+    {
+      question: "What does the `find` command do?",
+      options: [
+        "Finds text in files",
+        "Searches for files and directories",
+        "Finds running processes",
+        "Finds network connections"
+      ],
+      correct: 1,
+      explanation: "find searches for files and directories in the filesystem hierarchy."
+    },
+    {
+      question: "Which directory contains device files in Linux?",
+      options: ["/etc", "/var", "/dev", "/usr"],
       correct: 2,
-      explanation: "Star-Lord (Peter Quill) is the self-proclaimed leader of the Guardians of the Galaxy."
+      explanation: "/dev contains device files that represent hardware devices."
     },
     {
-      question: "What is the name of the AI that helps Tony Stark?",
-      options: ["FRIDAY", "JARVIS", "EDITH", "KAREN"],
+      question: "What does `df` command show?",
+      options: [
+        "Directory files",
+        "Disk free space",
+        "Data files",
+        "Default files"
+      ],
       correct: 1,
-      explanation: "JARVIS (Just A Rather Very Intelligent System) is Tony Stark's AI assistant."
+      explanation: "df (disk free) shows filesystem disk space usage."
     },
     {
-      question: "Which stone allows manipulation of time?",
-      options: ["Mind Stone", "Time Stone", "Reality Stone", "Space Stone"],
-      correct: 1,
-      explanation: "The Time Stone, housed in the Eye of Agamotto, allows manipulation of time."
-    },
-    {
-      question: "What is the real name of Ant-Man?",
-      options: ["Hank Pym", "Scott Lang", "Eric O'Grady", "Dave Mitchell"],
-      correct: 1,
-      explanation: "Scott Lang is the current Ant-Man, though Hank Pym was the original."
-    },
-    {
-      question: "Who is the God of Thunder?",
-      options: ["Loki", "Odin", "Thor", "Balder"],
+      question: "Which signal is sent by Ctrl+C?",
+      options: ["SIGTERM", "SIGKILL", "SIGINT", "SIGHUP"],
       correct: 2,
-      explanation: "Thor is the Asgardian God of Thunder and a founding member of the Avengers."
+      explanation: "Ctrl+C sends SIGINT (interrupt signal) to terminate a process."
     },
     {
-      question: "What is the name of the metal in Captain America's shield?",
-      options: ["Adamantium", "Vibranium", "Unobtainium", "Wakandium"],
-      correct: 1,
-      explanation: "Captain America's shield is made of Vibranium, the rare metal from Wakanda."
-    },
-    {
-      question: "Who is the king of Wakanda?",
-      options: ["T'Chaka", "T'Challa", "M'Baku", "W'Kabi"],
-      correct: 1,
-      explanation: "T'Challa becomes the king of Wakanda and the Black Panther after his father's death."
-    },
-    {
-      question: "What is Doctor Strange's real name?",
-      options: ["Stephen Strange", "Victor Strange", "Vincent Strange", "Simon Strange"],
+      question: "What is the purpose of `/etc/fstab` file?",
+      options: [
+        "File system table for mounting",
+        "File system backup",
+        "File system check",
+        "File system logs"
+      ],
       correct: 0,
-      explanation: "Stephen Strange is a former neurosurgeon who becomes the Sorcerer Supreme."
+      explanation: "/etc/fstab contains information about filesystems and their mount points."
     },
     {
-      question: "Which organization does Nick Fury work for?",
-      options: ["CIA", "FBI", "S.H.I.E.L.D.", "HYDRA"],
+      question: "Which command changes the group ownership of a file?",
+      options: ["chmod", "chown", "chgrp", "usermod"],
       correct: 2,
-      explanation: "Nick Fury is the director of S.H.I.E.L.D., the international peacekeeping organization."
+      explanation: "chgrp changes the group ownership of files and directories."
     },
     {
-      question: "What is the name of Thor's home planet?",
-      options: ["Midgard", "Asgard", "Jotunheim", "Alfheim"],
-      correct: 1,
-      explanation: "Asgard is Thor's home realm, one of the Nine Realms connected by Yggdrasil."
-    },
-    {
-      question: "Who created Ultron?",
-      options: ["Nick Fury", "Tony Stark", "Bruce Banner", "Hank Pym"],
-      correct: 1,
-      explanation: "Tony Stark created Ultron as an AI peacekeeping program that went rogue."
-    },
-    {
-      question: "What is the name of Peter Parker's aunt?",
-      options: ["Aunt May", "Aunt Martha", "Aunt Mary", "Aunt Sarah"],
+      question: "What does the `lsof` command do?",
+      options: [
+        "Lists open files",
+        "Lists system files",
+        "Lists log files",
+        "Lists object files"
+      ],
       correct: 0,
-      explanation: "Aunt May Parker raised Peter Parker after his parents died."
+      explanation: "lsof (list open files) shows which files are opened by which processes."
     },
     {
-      question: "Which Infinity Stone is blue?",
-      options: ["Mind Stone", "Power Stone", "Space Stone", "Reality Stone"],
+      question: "Which command shows the last few lines of system log?",
+      options: ["head /var/log/syslog", "tail /var/log/syslog", "cat /var/log/syslog", "less /var/log/syslog"],
+      correct: 1,
+      explanation: "tail /var/log/syslog shows the last few lines of the system log file."
+    },
+    {
+      question: "What does `alias` command do?",
+      options: [
+        "Creates shortcuts for commands",
+        "Shows user aliases",
+        "Creates file aliases",
+        "Shows command history"
+      ],
+      correct: 0,
+      explanation: "alias creates shortcuts or alternative names for commands."
+    },
+    {
+      question: "Which command shows disk partitions?",
+      options: ["fdisk -l", "df -h", "du -h", "mount"],
+      correct: 0,
+      explanation: "fdisk -l lists all disk partitions on the system."
+    },
+    {
+      question: "What is the default permission for newly created files?",
+      options: ["644", "755", "666", "777"],
+      correct: 0,
+      explanation: "Default permission for files is typically 644 (rw-r--r--)."
+    },
+    {
+      question: "Which command displays environment variables?",
+      options: ["env", "var", "export", "set"],
+      correct: 0,
+      explanation: "env displays all environment variables in the current session."
+    },
+    {
+      question: "What does `history` command show?",
+      options: [
+        "File history",
+        "System history",
+        "Command history",
+        "Login history"
+      ],
       correct: 2,
-      explanation: "The Space Stone (Tesseract) is blue and allows manipulation of space and teleportation."
+      explanation: "history displays the command history of the current user session."
     },
     {
-      question: "Who is Gamora's sister?",
-      options: ["Mantis", "Nebula", "Ayesha", "Yondu"],
-      correct: 1,
-      explanation: "Nebula is Gamora's adopted sister, both raised by Thanos as his daughters."
-    },
-    {
-      question: "What is the name of the raccoon in Guardians of the Galaxy?",
-      options: ["Rocket", "Trash Panda", "Rabbit", "Rodent"],
-      correct: 0,
-      explanation: "Rocket is the genetically modified raccoon who is an expert marksman and tactician."
-    },
-    {
-      question: "Who guards the Soul Stone?",
-      options: ["Thanos", "Red Skull", "Gamora", "Vormir Guardian"],
-      correct: 1,
-      explanation: "Red Skull was cursed to guard the Soul Stone on Vormir after touching the Tesseract."
-    },
-    {
-      question: "What is the name of Tony Stark's father?",
-      options: ["Henry Stark", "Howard Stark", "Harold Stark", "Herbert Stark"],
-      correct: 1,
-      explanation: "Howard Stark was Tony's father and a founding member of S.H.I.E.L.D."
-    },
-    {
-      question: "Which planet do the Guardians crash land on in the first movie?",
-      options: ["Xandar", "Morag", "Sovereign", "Berhart"],
-      correct: 0,
-      explanation: "The Guardians crash land on Xandar while trying to escape the Dark Aster."
-    },
-    {
-      question: "What is Scarlet Witch's real name?",
-      options: ["Wanda Maximoff", "Wanda Wilson", "Wanda Stark", "Wanda Rogers"],
-      correct: 0,
-      explanation: "Wanda Maximoff is the Scarlet Witch who gained powers from the Mind Stone experiments."
-    },
-    {
-      question: "Who is the voice of Groot?",
-      options: ["Chris Pratt", "Bradley Cooper", "Vin Diesel", "Dave Bautista"],
-      correct: 2,
-      explanation: "Vin Diesel provides the voice for Groot, even though he only says 'I am Groot.'"
-    },
-    {
-      question: "What is the name of the prison in Guardians of the Galaxy?",
-      options: ["The Vault", "The Kyln", "The Raft", "Seagate"],
-      correct: 1,
-      explanation: "The Kyln is the intergalactic prison where the Guardians first meet and plan their escape."
-    },
-    {
-      question: "Who becomes the new Black Panther after T'Challa?",
-      options: ["Shuri", "Okoye", "Nakia", "Ramonda"],
-      correct: 0,
-      explanation: "Shuri, T'Challa's sister and Wakanda's technological genius, becomes the new Black Panther."
-    },
-    {
-      question: "What is the name of the dimension Doctor Strange visits?",
-      options: ["Mirror Dimension", "Dark Dimension", "Quantum Realm", "Astral Plane"],
-      correct: 1,
-      explanation: "Doctor Strange visits the Dark Dimension where he bargains with Dormammu."
-    },
-    {
-      question: "Who is the Winter Soldier's handler?",
-      options: ["Alexander Pierce", "Arnim Zola", "Baron Zemo", "Red Skull"],
-      correct: 0,
-      explanation: "Alexander Pierce, a HYDRA leader within S.H.I.E.L.D., was the Winter Soldier's primary handler."
-    },
-    {
-      question: "What is the name of Captain Marvel's cat?",
-      options: ["Fluff", "Goose", "Chewie", "Flerken"],
-      correct: 1,
-      explanation: "Goose is Captain Marvel's 'cat' who is actually a dangerous alien species called a Flerken."
-    },
-    {
-      question: "Which Avenger is known as 'The First Avenger'?",
-      options: ["Iron Man", "Captain America", "Thor", "Hulk"],
-      correct: 1,
-      explanation: "Captain America is known as 'The First Avenger' as he was the first superhero in the MCU timeline."
-    },
-    {
-      question: "What is the name of Odin's spear?",
-      options: ["Mjolnir", "Stormbreaker", "Gungnir", "Hofund"],
-      correct: 2,
-      explanation: "Gungnir is Odin's enchanted spear that never misses its target."
-    },
-    {
-      question: "Who kills Thanos in Endgame?",
-      options: ["Iron Man", "Thor", "Captain America", "Both Thor and Iron Man"],
+      question: "Which command shows currently logged-in users?",
+      options: ["users", "who", "w", "All of the above"],
       correct: 3,
-      explanation: "Thor kills Thanos early in Endgame, and later Tony Stark defeats the 2014 version of Thanos."
+      explanation: "users, who, and w all show information about currently logged-in users."
     },
     {
-      question: "What is the name of the AI that replaces JARVIS?",
-      options: ["EDITH", "FRIDAY", "KAREN", "HELEN"],
-      correct: 1,
-      explanation: "FRIDAY (Female Replacement Intelligent Digital Assistant Youth) replaces JARVIS after he becomes Vision."
-    },
-    {
-      question: "Which realm is known as Earth in the MCU?",
-      options: ["Asgard", "Midgard", "Jotunheim", "Alfheim"],
-      correct: 1,
-      explanation: "Midgard is the Asgardian name for Earth, one of the Nine Realms."
-    },
-    {
-      question: "What is the name of the elite female bodyguards in Wakanda?",
-      options: ["Dora Milaje", "War Dogs", "Border Tribe", "River Tribe"],
+      question: "What does `nohup` command do?",
+      options: [
+        "Runs commands immune to hangups",
+        "No help command",
+        "Network operation",
+        "No output command"
+      ],
       correct: 0,
-      explanation: "The Dora Milaje are the elite female bodyguards who protect the king of Wakanda."
+      explanation: "nohup runs commands that continue running even after the terminal is closed."
     },
     {
-      question: "Who destroys the Time Stone?",
-      options: ["Thanos", "Doctor Strange", "Wanda Maximoff", "Vision"],
-      correct: 0,
-      explanation: "Thanos destroys all the Infinity Stones, including the Time Stone, to prevent their use."
-    },
-    {
-      question: "What is the name of the robot army in Age of Ultron?",
-      options: ["Ultron Sentries", "Iron Legion", "Ultron Drones", "Stark Sentries"],
-      correct: 0,
-      explanation: "The Ultron Sentries are the robot army created by Ultron to eliminate humanity."
-    },
-    {
-      question: "Who is the director of S.H.I.E.L.D. after Nick Fury?",
-      options: ["Maria Hill", "Phil Coulson", "Alexander Pierce", "Sharon Carter"],
+      question: "Which file contains encrypted user passwords?",
+      options: ["/etc/passwd", "/etc/shadow", "/etc/group", "/etc/gshadow"],
       correct: 1,
-      explanation: "Phil Coulson becomes director of S.H.I.E.L.D. after Nick Fury, though this is mainly in the TV series."
+      explanation: "/etc/shadow contains encrypted user passwords and password aging information."
     },
     {
-      question: "What is the name of the sentient planet in Guardians of the Galaxy Vol. 2?",
-      options: ["Ego", "Knowhere", "Sovereign", "Contraxia"],
+      question: "What does `jobs` command show?",
+      options: [
+        "Available jobs",
+        "System jobs",
+        "Background jobs in current shell",
+        "Cron jobs"
+      ],
+      correct: 2,
+      explanation: "jobs displays active background jobs in the current shell session."
+    },
+    {
+      question: "Which command is used to archive and compress files simultaneously?",
+      options: ["tar -czf", "gzip", "zip", "compress"],
       correct: 0,
-      explanation: "Ego is the living planet and Peter Quill's father in Guardians of the Galaxy Vol. 2."
-    },
-    {
-      question: "Which Avenger sacrifices themselves to obtain the Soul Stone?",
-      options: ["Hawkeye", "Black Widow", "Iron Man", "Captain America"],
-      correct: 1,
-      explanation: "Black Widow sacrifices herself on Vormir so Hawkeye can obtain the Soul Stone for the Avengers."
+      explanation: "tar -czf creates a compressed archive using gzip compression."
     }
   ];
 
@@ -424,11 +528,11 @@ const MCUQuiz: React.FC = () => {
 
   const getPerformanceMessage = () => {
     const percentage = Math.round((score / questions.length) * 100);
-    if (percentage >= 90) return "🏆 Incredible! You're a true MCU expert!";
-    if (percentage >= 80) return "⭐ Amazing! You know the Marvel universe well!";
-    if (percentage >= 70) return "🎯 Great job! You're a solid MCU fan!";
-    if (percentage >= 60) return "👍 Good work! Keep watching those Marvel movies!";
-    return "🚀 Time to rewatch the MCU! Your journey awaits!";
+    if (percentage >= 90) return "🏆 Outstanding! You're a Linux expert!";
+    if (percentage >= 80) return "🌟 Excellent! You have strong Linux knowledge!";
+    if (percentage >= 70) return "👍 Good job! You know your way around Linux!";
+    if (percentage >= 60) return "👌 Not bad! Keep practicing to improve!";
+    return "📚 Keep learning! Linux mastery takes time!";
   };
 
   if (!quizStarted) {
@@ -442,18 +546,18 @@ const MCUQuiz: React.FC = () => {
         <div className="glass-effect rounded-3xl p-12 max-w-2xl mx-4 text-center relative z-10 animate-pulse-glow">
           <div className="mb-8">
             <h1 className="text-6xl font-bold mb-4 marvel-gradient bg-clip-text text-transparent">
-              MCU QUIZ
+              🐧 LINUX QUIZ
             </h1>
-            <h2 className="text-3xl font-bold text-white mb-2">UNIVERSE CHALLENGE</h2>
+            <h2 className="text-3xl font-bold text-white mb-2">INTERVIEW CHALLENGE</h2>
             <p className="text-xl text-gray-300">
-              Test your Marvel Cinematic Universe knowledge
+              Test your Linux knowledge with interview questions
             </p>
           </div>
           
           <div className="mb-8 text-lg text-gray-200">
-            <p>🎬 50 Questions about your favorite heroes</p>
-            <p>⚡ From basic to intermediate MCU knowledge</p>
-            <p>🏆 See how well you know the Marvel Universe</p>
+            <p>💻 50 Questions about Linux commands and concepts</p>
+            <p>⚡ From basic to intermediate Linux knowledge</p>
+            <p>🏆 Perfect preparation for Linux interviews</p>
           </div>
           
           <button
@@ -513,7 +617,7 @@ const MCUQuiz: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold marvel-gradient bg-clip-text text-transparent mb-4">
-            MCU Quiz Challenge
+            🐧 Linux Interview Quiz
           </h1>
           <div className="text-white text-lg">
             Score: <span className="text-marvel-gold font-bold">{score}</span> / {questions.length}
