@@ -66,57 +66,83 @@ const evaluateAnswer = (userAnswer: string, referenceAnswer: string, questionTex
   ];
   
   // If answer is too short or contains invalid responses
-  if (userText.length < 20 || invalidResponses.some(invalid => userText.includes(invalid))) {
+  if (userText.length < 15 || invalidResponses.some(invalid => userText.includes(invalid))) {
     return { isValid: false, score: 0 };
   }
   
-  // Extract key technical terms from reference answer and question
-  const technicalTerms = [...referenceText.match(/\b(kubernetes|docker|aws|s3|pod|container|bucket|service|deployment|node|cluster|yaml|json|api|cli|command|server|database|network|security|access|permission|policy|role|user|group|instance|volume|storage|memory|cpu|load|balancer|proxy|gateway|endpoint|port|protocol|http|https|ssl|tls|certificate|key|token|authentication|authorization|configuration|environment|variable|script|pipeline|build|deploy|monitor|log|metric|alert|dashboard|backup|restore|scale|replicate|sync|async|queue|cache|cdn|dns|domain|subdomain|firewall|vpc|subnet|route|table|elastic|lambda|ec2|rds|iam|cloudformation|terraform|ansible|jenkins|github|git|commit|push|pull|merge|branch|tag|release|version|ci|cd|devops|automation|orchestration|microservice|monolith|architecture|pattern|design|best|practice|troubleshoot|debug|error|exception|timeout|retry|circuit|breaker|linux|ubuntu|centos|redhat|shell|bash|script|file|directory|permission|chmod|chown|systemctl|service|process|thread|memory|disk|network|iptables|firewall|cron|log|syslog)\b/gi) || []];
+  // Extract key technical terms from question and reference answer
+  const questionKeywords = [...questionLower.match(/\b(kubernetes|docker|aws|s3|pod|container|bucket|service|deployment|node|cluster|linux|git|github|jenkins|terraform|datadog|monitoring|ci|cd|devops|merge|rebase|pipeline|declarative|scripted|state|file|process|dns|discovery|microservice|testing|zero-downtime|blue-green|rolling)\b/gi) || []];
   
-  // Extract key terms from question to ensure relevance
-  const questionTerms = [...questionLower.match(/\b(kubernetes|docker|aws|s3|pod|container|bucket|service|deployment|node|cluster|linux|git|github|jenkins|terraform|datadog|monitoring|ci|cd|devops)\b/gi) || []];
+  // Get broader technical vocabulary from both question and reference
+  const technicalTerms = [
+    // Kubernetes terms
+    ...userText.match(/\b(pod|container|service|deployment|namespace|configmap|secret|ingress|nodeport|clusterip|loadbalancer|replica|scale|kubectl|yaml|manifest|endpoint|selector|label|annotation|volume|persistentvolume|storageclass|statefulset|daemonset|job|cronjob)\b/gi) || [],
+    // AWS terms
+    ...userText.match(/\b(s3|bucket|ec2|instance|lambda|cloudformation|iam|role|policy|vpc|subnet|security|group|load|balancer|route53|cloudfront|rds|dynamodb|elasticache|eks|fargate|ecs)\b/gi) || [],
+    // Docker terms
+    ...userText.match(/\b(container|image|dockerfile|docker|compose|volume|network|port|expose|bind|mount|registry|hub|build|run|exec|logs|inspect)\b/gi) || [],
+    // Git terms
+    ...userText.match(/\b(git|commit|push|pull|merge|rebase|branch|checkout|clone|fork|remote|origin|upstream|conflict|resolve|stash|cherry-pick|squash|reset|head|master|main)\b/gi) || [],
+    // DevOps terms
+    ...userText.match(/\b(ci|cd|pipeline|build|deploy|test|automation|monitoring|logging|alert|dashboard|infrastructure|terraform|ansible|jenkins|github|actions|workflow)\b/gi) || [],
+    // Linux terms
+    ...userText.match(/\b(linux|ubuntu|centos|bash|shell|command|file|directory|permission|chmod|chown|ps|top|grep|awk|sed|pipe|redirect|cron|systemctl|service|process|daemon)\b/gi) || []
+  ];
   
-  // Extract action words and step-wise indicators
-  const stepIndicators = userText.match(/\b(step\s*\d+|first|second|third|fourth|fifth|then|next|after|finally|lastly|\d+\.|•|→|->)\b/gi) || [];
-  const actionWords = [...userText.match(/\b(create|configure|setup|install|deploy|run|execute|start|stop|restart|update|upgrade|delete|remove|add|modify|change|edit|enable|disable|connect|disconnect|attach|detach|mount|unmount|expose|publish|bind|link|join|leave|scale|resize|migrate|backup|restore|clone|fork|merge|rebase|commit|push|pull|fetch|checkout|switch|branch|tag|release|build|compile|test|validate|verify|check|monitor|observe|track|trace|log|audit|secure|encrypt|decrypt|authenticate|authorize|grant|revoke|allow|deny|block|permit|restrict|limit|throttle|queue|cache|store|retrieve|fetch|query|search|filter|sort|group|aggregate|transform|parse|serialize|deserialize|encode|decode|compress|decompress|optimize|tune|configure|customize|integrate|implement|develop|code|script|automate|orchestrate|manage|administer|maintain|support|troubleshoot|debug|fix|resolve|handle|process|execute|invoke|trigger|schedule|batch|stream|async|sync|parallel|concurrent|sequential|linear|recursive|iterative)\b/gi) || []];
+  // Check for structured answer patterns
+  const stepPatterns = userText.match(/\b(step\s*\d+|first|second|third|fourth|fifth|then|next|after|finally|lastly|\d+\.|•|→|->|pehle|phir|baad|me|fir)\b/gi) || [];
+  const hasMultipleLines = userText.split(/[\n.]/).filter(line => line.trim().length > 10).length >= 3;
+  const hasStructuredFormat = stepPatterns.length >= 2 || hasMultipleLines;
   
-  const userWords = userText.split(/\s+/);
+  // Check for action/process words
+  const actionWords = [...userText.match(/\b(create|banate|configure|setup|install|deploy|run|start|enable|connect|expose|mount|scale|update|delete|add|modify|use|implement|apply|execute|manage|monitor|check|verify|troubleshoot|debug|resolve|handle|process|build|test|validate)\b/gi) || []];
   
-  // Check for technical concept match
-  const technicalMatch = technicalTerms.filter(term => 
-    userWords.some(userWord => userWord.includes(term.toLowerCase()) || term.toLowerCase().includes(userWord))
-  ).length;
+  // Topic relevance check - ensure answer is about the right topic
+  let topicRelevance = 0;
+  if (questionKeywords.length > 0) {
+    const matchedKeywords = questionKeywords.filter(keyword => userText.includes(keyword.toLowerCase()));
+    topicRelevance = matchedKeywords.length / questionKeywords.length;
+  } else {
+    // If no specific keywords, check if answer is generally DevOps related
+    topicRelevance = technicalTerms.length > 0 ? 1 : 0;
+  }
   
-  // Check if answer is relevant to the question topic
-  const topicRelevance = questionTerms.length > 0 ? 
-    questionTerms.filter(term => userText.includes(term)).length / questionTerms.length : 0;
+  // Concept understanding check
+  const conceptScore = technicalTerms.length / Math.max(1, userText.split(' ').length * 0.1); // Normalize by answer length
+  const actionScore = actionWords.length >= 2 ? 1 : actionWords.length * 0.5;
+  const structureScore = hasStructuredFormat ? 1 : 0.3;
   
-  // Check for approach/action match
-  const actionMatch = actionWords.filter(action => 
-    userWords.some(userWord => userWord.includes(action.toLowerCase()) || action.toLowerCase().includes(userWord))
-  ).length;
+  // Enhanced scoring with better weights
+  const overallScore = (topicRelevance * 0.4) + (conceptScore * 0.3) + (structureScore * 0.2) + (actionScore * 0.1);
   
-  // Check for structured response (step-wise explanation)
-  const hasStructure = stepIndicators.length >= 2 || userText.split('\n').length >= 3;
+  // More flexible validation criteria
+  const hasRelevantConcepts = technicalTerms.length >= 2 || topicRelevance >= 0.5;
+  const hasProperStructure = hasStructuredFormat && userText.length >= 50;
+  const isTopicRelevant = topicRelevance >= 0.3; // More lenient topic matching
+  const hasMinimumDepth = userText.split(' ').length >= 20; // At least 20 words
   
-  // Calculate scores
-  const technicalScore = technicalMatch / Math.max(1, technicalTerms.length);
-  const actionScore = actionMatch / Math.max(1, actionWords.length);
-  const structureScore = hasStructure ? 0.3 : 0;
-  const relevanceScore = topicRelevance;
+  // Accept answer if it meets these criteria
+  const isValid = (hasRelevantConcepts && hasProperStructure && isTopicRelevant && hasMinimumDepth) || 
+                  (overallScore >= 0.4 && hasMinimumDepth && isTopicRelevant);
   
-  // Overall score calculation with weights
-  const overallScore = (technicalScore * 0.4) + (actionScore * 0.3) + (structureScore * 0.2) + (relevanceScore * 0.1);
-  
-  // Enhanced validation criteria
-  const minScore = 0.25;
-  const hasBasicConcepts = technicalMatch >= 1;
-  const hasApproach = actionMatch >= 1 || stepIndicators.length >= 1;
-  const isRelevant = topicRelevance >= 0.5 || questionTerms.length === 0; // If no specific terms, assume general question
-  const hasMinimumLength = userText.length >= 50; // Increased minimum length
+  console.log('Answer Evaluation Debug:', {
+    userText: userText.substring(0, 100) + '...',
+    technicalTerms: technicalTerms.slice(0, 5),
+    questionKeywords,
+    topicRelevance,
+    conceptScore,
+    structureScore,
+    actionScore,
+    overallScore,
+    isValid,
+    hasRelevantConcepts,
+    hasProperStructure,
+    isTopicRelevant,
+    hasMinimumDepth
+  });
   
   return {
-    isValid: overallScore >= minScore && hasBasicConcepts && hasApproach && isRelevant && hasMinimumLength,
+    isValid,
     score: Math.round(overallScore * 100)
   };
 };
