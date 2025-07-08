@@ -4,6 +4,11 @@ import { QuizState, Question } from '@/types/quiz';
 import { selectQuestions } from '@/data/questions';
 import { allAwsQuestions } from '@/data/awsQuestions';
 import { allGithubQuestions } from '@/data/githubQuestions';
+import { allDockerQuestions } from '@/data/dockerQuestions';
+import { allKubernetesQuestions } from '@/data/kubernetesQuestions';
+import { allTerraformQuestions } from '@/data/terraformQuestions';
+import { allJenkinsQuestions } from '@/data/jenkinsQuestions';
+import { allDatadogQuestions } from '@/data/datadogQuestions';
 
 const getQuestionsBySkill = (skillId: string): Question[] => {
   switch (skillId) {
@@ -13,7 +18,16 @@ const getQuestionsBySkill = (skillId: string): Question[] => {
       return allAwsQuestions;
     case 'github':
       return allGithubQuestions;
-    // Add other skills here as we create their question sets
+    case 'docker':
+      return allDockerQuestions;
+    case 'kubernetes':
+      return allKubernetesQuestions;
+    case 'terraform':
+      return allTerraformQuestions;
+    case 'jenkins':
+      return allJenkinsQuestions;
+    case 'datadog':
+      return allDatadogQuestions;
     default:
       return selectQuestions(100); // Fallback to Linux questions
   }
