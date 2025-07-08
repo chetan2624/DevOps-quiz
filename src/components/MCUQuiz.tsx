@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useQuiz } from '@/hooks/useQuiz';
@@ -35,14 +36,16 @@ const MCUQuiz: React.FC = () => {
 
   useEffect(() => {
     if (progressBarRef.current) {
-      const progress = ((quiz.currentQuestion + 1) / quiz.selectedQuestions.length) * 100;
+      const progress = quiz.isInterviewMode 
+        ? ((quiz.currentQuestion + 1) / quiz.interviewQuestions.length) * 100
+        : ((quiz.currentQuestion + 1) / quiz.selectedQuestions.length) * 100;
       gsap.to(progressBarRef.current, {
         width: `${progress}%`,
         duration: 0.5,
         ease: "power2.out"
       });
     }
-  }, [quiz.currentQuestion, quiz.selectedQuestions.length]);
+  }, [quiz.currentQuestion, quiz.selectedQuestions.length, quiz.interviewQuestions.length, quiz.isInterviewMode]);
 
   useEffect(() => {
     createParticles();
@@ -76,6 +79,7 @@ const MCUQuiz: React.FC = () => {
       case 'terraform': return '🏗️';
       case 'jenkins': return '🔧';
       case 'datadog': return '📊';
+      case 'interview': return '🧠';
       default: return '💻';
     }
   };
@@ -90,6 +94,7 @@ const MCUQuiz: React.FC = () => {
       case 'terraform': return 'Terraform';
       case 'jenkins': return 'Jenkins';
       case 'datadog': return 'DataDog';
+      case 'interview': return 'Mere waale questions';
       default: return 'DevOps';
     }
   };
@@ -142,6 +147,16 @@ const MCUQuiz: React.FC = () => {
     const currentQ = quiz.interviewQuestions[quiz.currentQuestion];
     const currentFeedback = quiz.interviewFeedback[quiz.currentQuestion];
     
+    // Create interview answers array for navigation (mark failed conditional questions as failed)
+    const interviewAnswers = quiz.interviewFeedback.map((feedback, index) => {
+      if (feedback === 'conditional_failed' || feedback === 'incorrect') {
+        return -1; // Mark as failed (red)
+      } else if (feedback === 'correct' || feedback === 'conditional_correct') {
+        return index; // Mark as answered
+      }
+      return undefined; // Not answered yet
+    });
+    
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
         <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
@@ -163,7 +178,7 @@ const MCUQuiz: React.FC = () => {
           <QuestionNavigation
             currentQuestion={quiz.currentQuestion}
             totalQuestions={quiz.interviewQuestions.length}
-            userAnswers={quiz.interviewFeedback.map((feedback, index) => feedback ? index : undefined)}
+            userAnswers={interviewAnswers}
             onJumpToQuestion={quiz.jumpToQuestion}
             onExit={quiz.exitQuiz}
           />
