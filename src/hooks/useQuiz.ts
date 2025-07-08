@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { QuizState, Question, InterviewQuestion } from '@/types/quiz';
 import { selectQuestions } from '@/data/questions';
@@ -34,6 +35,15 @@ const getQuestionsBySkill = (skillId: string): Question[] => {
 };
 
 const shuffleArray = (array: Question[]): Question[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+const shuffleInterviewQuestions = (array: InterviewQuestion[]): InterviewQuestion[] => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -102,7 +112,7 @@ export const useQuiz = () => {
     
     if (quizState.selectedSkill === 'interview') {
       // Interview mode setup
-      const shuffledQuestions = shuffleArray([...allInterviewQuestions]);
+      const shuffledQuestions = shuffleInterviewQuestions([...allInterviewQuestions]);
       const selectedQuestions = shuffledQuestions.slice(0, Math.min(10, length));
       
       setQuizState(prev => ({
