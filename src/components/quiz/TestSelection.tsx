@@ -4,9 +4,16 @@ import React, { useRef, useEffect } from 'react';
 interface TestSelectionProps {
   onSelectTest: (length: number) => void;
   onBack: () => void;
+  skillName?: string;
+  skillIcon?: string;
 }
 
-const TestSelection: React.FC<TestSelectionProps> = ({ onSelectTest, onBack }) => {
+const TestSelection: React.FC<TestSelectionProps> = ({ 
+  onSelectTest, 
+  onBack, 
+  skillName = "DevOps",
+  skillIcon = "💻"
+}) => {
   const particlesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,9 +40,11 @@ const TestSelection: React.FC<TestSelectionProps> = ({ onSelectTest, onBack }) =
       <div className="absolute inset-0 cosmic-gradient opacity-90" />
       
       <div className="glass-effect rounded-3xl p-12 max-w-2xl mx-4 text-center relative z-10">
-        <h2 className="text-4xl font-bold text-white mb-8">Choose Your Test</h2>
+        <h2 className="text-4xl font-bold text-white mb-4">
+          {skillIcon} {skillName} Quiz
+        </h2>
         <p className="text-xl text-gray-300 mb-12">
-          Select the number of questions for your Linux interview practice
+          Select the number of questions for your {skillName} interview practice
         </p>
         
         <div className="grid gap-6 mb-8">
@@ -71,7 +80,7 @@ const TestSelection: React.FC<TestSelectionProps> = ({ onSelectTest, onBack }) =
           onClick={onBack}
           className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transform transition-all duration-300"
         >
-          Back
+          Back to Skills
         </button>
       </div>
     </div>

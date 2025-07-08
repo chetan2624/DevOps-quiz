@@ -16,4 +16,14 @@ export interface QuizState {
   testLength: number;
   selectedQuestions: Question[];
   showTestSelection: boolean;
+  showSkillSelection: boolean;
+  selectedSkill: string | null;
+}
+
+export interface Skill {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  questionCount: number;
 }

@@ -6,13 +6,17 @@ interface ResultsScreenProps {
   totalQuestions: number;
   testLength: number;
   onRestart: () => void;
+  skillName?: string;
+  skillIcon?: string;
 }
 
 const ResultsScreen: React.FC<ResultsScreenProps> = ({ 
   score, 
   totalQuestions, 
   testLength, 
-  onRestart 
+  onRestart,
+  skillName = "DevOps",
+  skillIcon = "💻"
 }) => {
   const particlesRef = useRef<HTMLDivElement>(null);
 
@@ -36,11 +40,11 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({
 
   const getPerformanceMessage = () => {
     const percentage = Math.round((score / totalQuestions) * 100);
-    if (percentage >= 90) return "🏆 Outstanding! You're a Linux expert!";
-    if (percentage >= 80) return "🌟 Excellent! You have strong Linux knowledge!";
-    if (percentage >= 70) return "👍 Good job! You know your way around Linux!";
-    if (percentage >= 60) return "👌 Not bad! Keep practicing to improve!";
-    return "📚 Keep learning! Linux mastery takes time!";
+    if (percentage >= 90) return `🏆 Outstanding! You're a ${skillName} expert!`;
+    if (percentage >= 80) return `🌟 Excellent! You have strong ${skillName} knowledge!`;
+    if (percentage >= 70) return `👍 Good job! You know your way around ${skillName}!`;
+    if (percentage >= 60) return `👌 Not bad! Keep practicing to improve your ${skillName} skills!`;
+    return `📚 Keep learning! ${skillName} mastery takes time!`;
   };
 
   const percentage = Math.round((score / totalQuestions) * 100);
@@ -51,7 +55,13 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({
       <div className="absolute inset-0 cosmic-gradient opacity-90" />
       
       <div className="glass-effect rounded-3xl p-12 max-w-2xl mx-4 text-center relative z-10">
-        <h2 className="text-4xl font-bold text-white mb-8">🎉 Quiz Complete!</h2>
+        <h2 className="text-4xl font-bold text-white mb-8">
+          🎉 {skillName} Quiz Complete!
+        </h2>
+        
+        <div className="text-6xl mb-4">
+          {skillIcon}
+        </div>
         
         <div className="text-8xl font-bold mb-4 marvel-gradient bg-clip-text text-transparent">
           {score}/{totalQuestions}

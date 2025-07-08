@@ -2,6 +2,31 @@
 import { useState } from 'react';
 import { QuizState, Question } from '@/types/quiz';
 import { selectQuestions } from '@/data/questions';
+import { allAwsQuestions } from '@/data/awsQuestions';
+import { allGithubQuestions } from '@/data/githubQuestions';
+
+const getQuestionsBySkill = (skillId: string): Question[] => {
+  switch (skillId) {
+    case 'linux':
+      return selectQuestions(100); // Use existing Linux questions
+    case 'aws':
+      return allAwsQuestions;
+    case 'github':
+      return allGithubQuestions;
+    // Add other skills here as we create their question sets
+    default:
+      return selectQuestions(100); // Fallback to Linux questions
+  }
+};
+
+const shuffleArray = (array: Question[]): Question[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 export const useQuiz = () => {
   const [quizState, setQuizState] = useState<QuizState>({
@@ -14,17 +39,34 @@ export const useQuiz = () => {
     testLength: 0,
     selectedQuestions: [],
     showTestSelection: false,
+    showSkillSelection: false,
+    selectedSkill: null,
   });
 
-  const startTestSelection = () => {
-    setQuizState(prev => ({ ...prev, showTestSelection: true }));
+  const startSkillSelection = () => {
+    setQuizState(prev => ({ ...prev, showSkillSelection: true }));
+  };
+
+  const selectSkill = (skillId: string) => {
+    setQuizState(prev => ({
+      ...prev,
+      selectedSkill: skillId,
+      showSkillSelection: false,
+      showTestSelection: true,
+    }));
   };
 
   const selectTest = (length: number) => {
+    if (!quizState.selectedSkill) return;
+    
+    const allQuestions = getQuestionsBySkill(quizState.selectedSkill);
+    const shuffledQuestions = shuffleArray(allQuestions);
+    const selectedQuestions = shuffledQuestions.slice(0, length);
+    
     setQuizState(prev => ({
       ...prev,
       testLength: length,
-      selectedQuestions: selectQuestions(length),
+      selectedQuestions,
       showTestSelection: false,
       quizStarted: true,
     }));
@@ -89,6 +131,8 @@ export const useQuiz = () => {
       testLength: 0,
       selectedQuestions: [],
       showTestSelection: false,
+      showSkillSelection: false,
+      selectedSkill: null,
     });
   };
 
@@ -103,12 +147,24 @@ export const useQuiz = () => {
       testLength: 0,
       selectedQuestions: [],
       showTestSelection: false,
+      showSkillSelection: false,
+      selectedSkill: null,
     });
+  };
+
+  const backToSkillSelection = () => {
+    setQuizState(prev => ({
+      ...prev,
+      showTestSelection: false,
+      showSkillSelection: true,
+      selectedSkill: null,
+    }));
   };
 
   return {
     ...quizState,
-    startTestSelection,
+    startSkillSelection,
+    selectSkill,
     selectTest,
     selectAnswer,
     nextQuestion,
@@ -116,5 +172,6 @@ export const useQuiz = () => {
     jumpToQuestion,
     exitQuiz,
     restartQuiz,
+    backToSkillSelection,
   };
 };

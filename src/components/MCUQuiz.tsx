@@ -1,7 +1,9 @@
+
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useQuiz } from '@/hooks/useQuiz';
 import StartScreen from './quiz/StartScreen';
+import SkillSelection from './quiz/SkillSelection';
 import TestSelection from './quiz/TestSelection';
 import ResultsScreen from './quiz/ResultsScreen';
 import QuestionNavigation from './quiz/QuestionNavigation';
@@ -64,9 +66,47 @@ const MCUQuiz: React.FC = () => {
     quiz.selectAnswer(index);
   };
 
+  const getSkillIcon = (skillId: string | null): string => {
+    switch (skillId) {
+      case 'linux': return '🐧';
+      case 'aws': return '☁️';
+      case 'github': return '🔗';
+      case 'docker': return '🐳';
+      case 'kubernetes': return '⚙️';
+      case 'terraform': return '🏗️';
+      case 'jenkins': return '🔧';
+      case 'datadog': return '📊';
+      default: return '💻';
+    }
+  };
+
+  const getSkillName = (skillId: string | null): string => {
+    switch (skillId) {
+      case 'linux': return 'Linux';
+      case 'aws': return 'AWS';
+      case 'github': return 'GitHub';
+      case 'docker': return 'Docker';
+      case 'kubernetes': return 'Kubernetes';
+      case 'terraform': return 'Terraform';
+      case 'jenkins': return 'Jenkins';
+      case 'datadog': return 'DataDog';
+      default: return 'DevOps';
+    }
+  };
+
   // Start screen
-  if (!quiz.showTestSelection && !quiz.quizStarted) {
-    return <StartScreen onStartTestSelection={quiz.startTestSelection} />;
+  if (!quiz.showSkillSelection && !quiz.showTestSelection && !quiz.quizStarted) {
+    return <StartScreen onStartTestSelection={quiz.startSkillSelection} />;
+  }
+
+  // Skill selection screen
+  if (quiz.showSkillSelection && !quiz.quizStarted) {
+    return (
+      <SkillSelection 
+        onSelectSkill={quiz.selectSkill}
+        onBack={() => quiz.exitQuiz()}
+      />
+    );
   }
 
   // Test selection screen
@@ -74,7 +114,9 @@ const MCUQuiz: React.FC = () => {
     return (
       <TestSelection 
         onSelectTest={quiz.selectTest}
-        onBack={() => quiz.exitQuiz()}
+        onBack={quiz.backToSkillSelection}
+        skillName={getSkillName(quiz.selectedSkill)}
+        skillIcon={getSkillIcon(quiz.selectedSkill)}
       />
     );
   }
@@ -87,6 +129,8 @@ const MCUQuiz: React.FC = () => {
         totalQuestions={quiz.selectedQuestions.length}
         testLength={quiz.testLength}
         onRestart={quiz.restartQuiz}
+        skillName={getSkillName(quiz.selectedSkill)}
+        skillIcon={getSkillIcon(quiz.selectedSkill)}
       />
     );
   }
@@ -104,7 +148,7 @@ const MCUQuiz: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold marvel-gradient bg-clip-text text-transparent mb-4">
-            🐧 Linux Interview Quiz
+            {getSkillIcon(quiz.selectedSkill)} {getSkillName(quiz.selectedSkill)} Interview Quiz
           </h1>
           <div className="text-white text-lg">
             Score: <span className="text-marvel-gold font-bold">{quiz.score}</span> / {quiz.selectedQuestions.length} 
