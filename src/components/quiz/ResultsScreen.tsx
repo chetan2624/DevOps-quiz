@@ -1,5 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
+import { AuthHeader } from '@/components/auth/AuthHeader';
+import { EmailReport } from './EmailReport';
 
 interface ResultsScreenProps {
   score: number;
@@ -90,43 +92,61 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({
   const percentage = Math.round((score / totalQuestions) * 100);
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
+      {/* Auth Header */}
+      <div className="absolute top-4 right-4 z-20">
+        <AuthHeader />
+      </div>
+      
       <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
       <div className="absolute inset-0 cosmic-gradient opacity-90" />
       
-      <div className="glass-effect rounded-3xl p-12 max-w-2xl mx-4 text-center relative z-10">
-        <h2 className="text-4xl font-bold text-white mb-8">
-          🎉 {isInterviewMode ? 'Interview Practice' : `${skillName} Quiz`} Complete!
-        </h2>
-        
-        <div className="text-6xl mb-4">
-          {skillIcon}
+      <div className="flex-1 flex items-center justify-center">
+        <div className="glass-effect rounded-3xl p-12 max-w-2xl mx-4 text-center relative z-10">
+          <h2 className="text-4xl font-bold text-white mb-8">
+            🎉 {isInterviewMode ? 'Interview Practice' : `${skillName} Quiz`} Complete!
+          </h2>
+          
+          <div className="text-6xl mb-4">
+            {skillIcon}
+          </div>
+          
+          <div className="text-8xl font-bold mb-4 marvel-gradient bg-clip-text text-transparent">
+            {score}/{totalQuestions}
+          </div>
+          
+          <div className="text-6xl font-bold mb-6 text-marvel-gold">
+            {percentage}%
+          </div>
+          
+          {getInterviewStats()}
+          
+          <p className="text-2xl text-white mb-8">
+            {getPerformanceMessage()}
+          </p>
+          
+          <div className="text-lg text-gray-300 mb-8">
+            Test Length: {testLength} questions
+          </div>
+          
+          <div className="flex flex-col gap-4 items-center">
+            <button
+              onClick={onRestart}
+              className="bg-gradient-to-r from-marvel-blue to-marvel-purple text-white font-bold py-4 px-12 rounded-full text-xl hover:scale-105 transform transition-all duration-300 shadow-2xl"
+            >
+              Try Again
+            </button>
+            
+            <EmailReport
+              score={score}
+              totalQuestions={totalQuestions}
+              skillName={skillName}
+              testLength={testLength}
+              isInterviewMode={isInterviewMode}
+              interviewFeedback={interviewFeedback}
+            />
+          </div>
         </div>
-        
-        <div className="text-8xl font-bold mb-4 marvel-gradient bg-clip-text text-transparent">
-          {score}/{totalQuestions}
-        </div>
-        
-        <div className="text-6xl font-bold mb-6 text-marvel-gold">
-          {percentage}%
-        </div>
-        
-        {getInterviewStats()}
-        
-        <p className="text-2xl text-white mb-8">
-          {getPerformanceMessage()}
-        </p>
-        
-        <div className="text-lg text-gray-300 mb-8">
-          Test Length: {testLength} questions
-        </div>
-        
-        <button
-          onClick={onRestart}
-          className="bg-gradient-to-r from-marvel-blue to-marvel-purple text-white font-bold py-4 px-12 rounded-full text-xl hover:scale-105 transform transition-all duration-300 shadow-2xl"
-        >
-          Try Again
-        </button>
       </div>
     </div>
   );
