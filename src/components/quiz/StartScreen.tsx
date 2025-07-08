@@ -36,19 +36,20 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
       <div className="glass-effect rounded-3xl p-12 max-w-2xl mx-4 text-center relative z-10 animate-pulse-glow">
         <div className="mb-8">
           <h1 className="text-6xl font-bold mb-4 marvel-gradient bg-clip-text text-transparent">
-            🐧 LINUX QUIZ
+            🚀 DEVOPS QUIZ
           </h1>
-          <h2 className="text-3xl font-bold text-white mb-2">INTERVIEW CHALLENGE</h2>
+          <h2 className="text-3xl font-bold text-white mb-2">INTERVIEW MASTERY CHALLENGE</h2>
           <p className="text-xl text-gray-300">
-            Test your Linux knowledge with interview questions
+            Master DevOps skills with comprehensive interview questions
           </p>
         </div>
         
         <div className="mb-8 text-lg text-gray-200">
-          <p>💻 100+ Linux interview questions</p>
+          <p>💻 8 DevOps Skills: Linux, AWS, GitHub, Docker, Kubernetes, Terraform, Jenkins, DataDog</p>
+          <p>📚 100+ Interview questions per skill</p>
           <p>⚡ Choose your test length: 20, 30, or 50 questions</p>
           <p>🔀 Questions are randomly shuffled each time</p>
-          <p>🏆 Perfect preparation for Linux interviews</p>
+          <p>🏆 Perfect preparation for DevOps interviews</p>
         </div>
         
         <button

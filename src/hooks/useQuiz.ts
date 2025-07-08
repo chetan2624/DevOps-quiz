@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { QuizState, Question } from '@/types/quiz';
 import { selectQuestions } from '@/data/questions';
@@ -145,7 +144,7 @@ export const useQuiz = () => {
       testLength: 0,
       selectedQuestions: [],
       showTestSelection: false,
-      showSkillSelection: false,
+      showSkillSelection: true,
       selectedSkill: null,
     });
   };
