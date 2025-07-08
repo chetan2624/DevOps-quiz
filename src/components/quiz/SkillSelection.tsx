@@ -9,6 +9,13 @@ interface SkillSelectionProps {
 
 const skills: Skill[] = [
   {
+    id: 'interview',
+    name: 'Mere waale questions',
+    icon: '🧠',
+    description: 'Open-ended interview questions in Hinglish - Real interview experience',
+    questionCount: '10 Interactive'
+  },
+  {
     id: 'linux',
     name: 'Linux',
     icon: '🐧',

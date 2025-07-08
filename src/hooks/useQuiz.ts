@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { QuizState, Question } from '@/types/quiz';
+import { QuizState, Question, InterviewQuestion } from '@/types/quiz';
 import { selectQuestions } from '@/data/questions';
 import { allAwsQuestions } from '@/data/awsQuestions';
 import { allGithubQuestions } from '@/data/githubQuestions';
@@ -8,6 +8,7 @@ import { allKubernetesQuestions } from '@/data/kubernetesQuestions';
 import { allTerraformQuestions } from '@/data/terraformQuestions';
 import { allJenkinsQuestions } from '@/data/jenkinsQuestions';
 import { allDatadogQuestions } from '@/data/datadogQuestions';
+import { allInterviewQuestions } from '@/data/interviewQuestions';
 
 const getQuestionsBySkill = (skillId: string): Question[] => {
   switch (skillId) {
@@ -41,6 +42,25 @@ const shuffleArray = (array: Question[]): Question[] => {
   return shuffled;
 };
 
+// Simple answer evaluation function
+const evaluateAnswer = (userAnswer: string, referenceAnswer: string): boolean => {
+  const userWords = userAnswer.toLowerCase().split(/\s+/);
+  const referenceWords = referenceAnswer.toLowerCase().split(/\s+/);
+  
+  // Extract key concepts from reference answer
+  const keyWords = referenceWords.filter(word => 
+    word.length > 3 && 
+    !['kaise', 'karta', 'karte', 'karke', 'hote', 'hota', 'hai', 'the', 'and', 'for', 'with'].includes(word)
+  );
+  
+  // Check if user answer contains at least 40% of key concepts
+  const matchedWords = keyWords.filter(word => 
+    userWords.some(userWord => userWord.includes(word) || word.includes(userWord))
+  );
+  
+  return matchedWords.length >= Math.max(2, keyWords.length * 0.4);
+};
+
 export const useQuiz = () => {
   const [quizState, setQuizState] = useState<QuizState>({
     currentQuestion: 0,
@@ -54,6 +74,14 @@ export const useQuiz = () => {
     showTestSelection: false,
     showSkillSelection: false,
     selectedSkill: null,
+    // Interview mode
+    isInterviewMode: false,
+    interviewQuestions: [],
+    userTextAnswers: [],
+    currentAnswer: '',
+    showConditionalQuestion: false,
+    conditionalAnswered: false,
+    interviewFeedback: [],
   });
 
   const startSkillSelection = () => {
@@ -72,17 +100,36 @@ export const useQuiz = () => {
   const selectTest = (length: number) => {
     if (!quizState.selectedSkill) return;
     
-    const allQuestions = getQuestionsBySkill(quizState.selectedSkill);
-    const shuffledQuestions = shuffleArray(allQuestions);
-    const selectedQuestions = shuffledQuestions.slice(0, length);
-    
-    setQuizState(prev => ({
-      ...prev,
-      testLength: length,
-      selectedQuestions,
-      showTestSelection: false,
-      quizStarted: true,
-    }));
+    if (quizState.selectedSkill === 'interview') {
+      // Interview mode setup
+      const shuffledQuestions = shuffleArray([...allInterviewQuestions]);
+      const selectedQuestions = shuffledQuestions.slice(0, Math.min(10, length));
+      
+      setQuizState(prev => ({
+        ...prev,
+        testLength: selectedQuestions.length,
+        interviewQuestions: selectedQuestions,
+        userTextAnswers: new Array(selectedQuestions.length).fill(''),
+        interviewFeedback: new Array(selectedQuestions.length).fill(''),
+        showTestSelection: false,
+        quizStarted: true,
+        isInterviewMode: true,
+      }));
+    } else {
+      // Regular MCQ mode
+      const allQuestions = getQuestionsBySkill(quizState.selectedSkill);
+      const shuffledQuestions = shuffleArray(allQuestions);
+      const selectedQuestions = shuffledQuestions.slice(0, length);
+      
+      setQuizState(prev => ({
+        ...prev,
+        testLength: length,
+        selectedQuestions,
+        showTestSelection: false,
+        quizStarted: true,
+        isInterviewMode: false,
+      }));
+    }
   };
 
   const selectAnswer = (selectedIndex: number) => {
@@ -101,15 +148,97 @@ export const useQuiz = () => {
     }));
   };
 
-  const nextQuestion = () => {
-    if (quizState.currentQuestion < quizState.selectedQuestions.length - 1) {
+  const submitTextAnswer = () => {
+    if (quizState.isInterviewMode && quizState.currentAnswer.trim()) {
+      const currentQ = quizState.interviewQuestions[quizState.currentQuestion];
+      const isCorrect = evaluateAnswer(quizState.currentAnswer, currentQ.referenceAnswer);
+      
+      const newTextAnswers = [...quizState.userTextAnswers];
+      newTextAnswers[quizState.currentQuestion] = quizState.currentAnswer;
+      
+      const newFeedback = [...quizState.interviewFeedback];
+      
+      if (isCorrect) {
+        newFeedback[quizState.currentQuestion] = 'correct';
+        setQuizState(prev => ({
+          ...prev,
+          userTextAnswers: newTextAnswers,
+          interviewFeedback: newFeedback,
+          answered: true,
+          score: prev.score + 1,
+          currentAnswer: '',
+        }));
+      } else if (currentQ.conditionalQuestion && !quizState.showConditionalQuestion) {
+        // Show conditional question
+        setQuizState(prev => ({
+          ...prev,
+          userTextAnswers: newTextAnswers,
+          showConditionalQuestion: true,
+          currentAnswer: '',
+        }));
+      } else {
+        // Final attempt or no conditional question
+        newFeedback[quizState.currentQuestion] = quizState.showConditionalQuestion ? 'conditional_failed' : 'incorrect';
+        setQuizState(prev => ({
+          ...prev,
+          userTextAnswers: newTextAnswers,
+          interviewFeedback: newFeedback,
+          answered: true,
+          currentAnswer: '',
+          showConditionalQuestion: false,
+        }));
+      }
+    }
+  };
+
+  const submitConditionalAnswer = () => {
+    if (quizState.isInterviewMode && quizState.currentAnswer.trim()) {
+      const currentQ = quizState.interviewQuestions[quizState.currentQuestion];
+      const isCorrect = currentQ.conditionalReferenceAnswer ? 
+        evaluateAnswer(quizState.currentAnswer, currentQ.conditionalReferenceAnswer) : false;
+      
+      const newFeedback = [...quizState.interviewFeedback];
+      newFeedback[quizState.currentQuestion] = isCorrect ? 'conditional_correct' : 'conditional_failed';
+      
       setQuizState(prev => ({
         ...prev,
-        currentQuestion: prev.currentQuestion + 1,
-        answered: prev.userAnswers[prev.currentQuestion + 1] !== undefined,
+        interviewFeedback: newFeedback,
+        answered: true,
+        conditionalAnswered: true,
+        score: isCorrect ? prev.score + 1 : prev.score,
+        currentAnswer: '',
+        showConditionalQuestion: false,
       }));
+    }
+  };
+
+  const updateCurrentAnswer = (answer: string) => {
+    setQuizState(prev => ({ ...prev, currentAnswer: answer }));
+  };
+
+  const nextQuestion = () => {
+    if (quizState.isInterviewMode) {
+      if (quizState.currentQuestion < quizState.interviewQuestions.length - 1) {
+        setQuizState(prev => ({
+          ...prev,
+          currentQuestion: prev.currentQuestion + 1,
+          answered: prev.interviewFeedback[prev.currentQuestion + 1] !== '',
+          showConditionalQuestion: false,
+          conditionalAnswered: false,
+        }));
+      } else {
+        setQuizState(prev => ({ ...prev, showResults: true }));
+      }
     } else {
-      setQuizState(prev => ({ ...prev, showResults: true }));
+      if (quizState.currentQuestion < quizState.selectedQuestions.length - 1) {
+        setQuizState(prev => ({
+          ...prev,
+          currentQuestion: prev.currentQuestion + 1,
+          answered: prev.userAnswers[prev.currentQuestion + 1] !== undefined,
+        }));
+      } else {
+        setQuizState(prev => ({ ...prev, showResults: true }));
+      }
     }
   };
 
@@ -146,6 +275,13 @@ export const useQuiz = () => {
       showTestSelection: false,
       showSkillSelection: true,
       selectedSkill: null,
+      isInterviewMode: false,
+      interviewQuestions: [],
+      userTextAnswers: [],
+      currentAnswer: '',
+      showConditionalQuestion: false,
+      conditionalAnswered: false,
+      interviewFeedback: [],
     });
   };
 
@@ -162,6 +298,13 @@ export const useQuiz = () => {
       showTestSelection: false,
       showSkillSelection: false,
       selectedSkill: null,
+      isInterviewMode: false,
+      interviewQuestions: [],
+      userTextAnswers: [],
+      currentAnswer: '',
+      showConditionalQuestion: false,
+      conditionalAnswered: false,
+      interviewFeedback: [],
     });
   };
 
@@ -180,6 +323,9 @@ export const useQuiz = () => {
     selectSkill,
     selectTest,
     selectAnswer,
+    submitTextAnswer,
+    submitConditionalAnswer,
+    updateCurrentAnswer,
     nextQuestion,
     prevQuestion,
     jumpToQuestion,

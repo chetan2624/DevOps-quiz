@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useQuiz } from '@/hooks/useQuiz';
@@ -7,6 +6,7 @@ import SkillSelection from './quiz/SkillSelection';
 import TestSelection from './quiz/TestSelection';
 import ResultsScreen from './quiz/ResultsScreen';
 import QuestionNavigation from './quiz/QuestionNavigation';
+import InterviewQuestion from './quiz/InterviewQuestion';
 
 const MCUQuiz: React.FC = () => {
   const quiz = useQuiz();
@@ -136,6 +136,86 @@ const MCUQuiz: React.FC = () => {
   }
 
   // Quiz interface
+  if (quiz.isInterviewMode) {
+    const currentQ = quiz.interviewQuestions[quiz.currentQuestion];
+    const currentFeedback = quiz.interviewFeedback[quiz.currentQuestion];
+    
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
+        <div className="absolute inset-0 cosmic-gradient opacity-90" />
+        
+        <div ref={quizContainerRef} className="glass-effect rounded-3xl p-8 max-w-4xl mx-4 relative z-10 w-full">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold marvel-gradient bg-clip-text text-transparent mb-4">
+              🧠 Mere waale questions - Interview Mode
+            </h1>
+            <div className="text-white text-lg">
+              Progress: <span className="text-marvel-gold font-bold">{quiz.score}</span> / {quiz.interviewQuestions.length} 
+              <span className="text-gray-300 ml-4">(Interview Practice)</span>
+            </div>
+          </div>
+
+          {/* Question Navigation */}
+          <QuestionNavigation
+            currentQuestion={quiz.currentQuestion}
+            totalQuestions={quiz.interviewQuestions.length}
+            userAnswers={quiz.interviewFeedback.map((feedback, index) => feedback ? index : undefined)}
+            onJumpToQuestion={quiz.jumpToQuestion}
+            onExit={quiz.exitQuiz}
+          />
+
+          {/* Progress Bar */}
+          <div className="glass-effect rounded-2xl p-4 mb-8">
+            <div className="bg-gray-700 rounded-xl h-6 overflow-hidden relative progress-shimmer">
+              <div
+                ref={progressBarRef}
+                className="h-full bg-gradient-to-r from-marvel-red via-marvel-gold to-marvel-blue rounded-xl"
+                style={{ width: '0%' }}
+              />
+            </div>
+          </div>
+
+          {/* Interview Question */}
+          <InterviewQuestion
+            question={currentQ.question}
+            conditionalQuestion={currentQ.conditionalQuestion}
+            currentAnswer={quiz.currentAnswer}
+            onAnswerChange={quiz.updateCurrentAnswer}
+            onSubmit={quiz.submitTextAnswer}
+            onConditionalSubmit={quiz.submitConditionalAnswer}
+            showConditional={quiz.showConditionalQuestion}
+            answered={quiz.answered}
+            feedback={currentFeedback}
+            questionNumber={quiz.currentQuestion + 1}
+            totalQuestions={quiz.interviewQuestions.length}
+          />
+
+          {/* Navigation */}
+          <div className="flex justify-between">
+            <button
+              onClick={quiz.prevQuestion}
+              disabled={quiz.currentQuestion === 0}
+              className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform transition-all duration-300"
+            >
+              Previous
+            </button>
+            
+            <button
+              onClick={quiz.nextQuestion}
+              disabled={!quiz.answered}
+              className="bg-gradient-to-r from-marvel-red to-marvel-gold text-white font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform transition-all duration-300"
+            >
+              {quiz.currentQuestion === quiz.interviewQuestions.length - 1 ? 'Finish Interview' : 'Next'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Regular MCQ Quiz interface
   const currentQ = quiz.selectedQuestions[quiz.currentQuestion];
   const isAnswered = quiz.userAnswers[quiz.currentQuestion] !== undefined;
 

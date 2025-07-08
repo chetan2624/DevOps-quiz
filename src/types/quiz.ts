@@ -6,6 +6,15 @@ export interface Question {
   explanation: string;
 }
 
+export interface InterviewQuestion {
+  id: string;
+  question: string;
+  referenceAnswer: string;
+  conditionalQuestion?: string;
+  conditionalReferenceAnswer?: string;
+  category: string;
+}
+
 export interface QuizState {
   currentQuestion: number;
   score: number;
@@ -18,6 +27,14 @@ export interface QuizState {
   showTestSelection: boolean;
   showSkillSelection: boolean;
   selectedSkill: string | null;
+  // Interview mode specific
+  isInterviewMode: boolean;
+  interviewQuestions: InterviewQuestion[];
+  userTextAnswers: string[];
+  currentAnswer: string;
+  showConditionalQuestion: boolean;
+  conditionalAnswered: boolean;
+  interviewFeedback: string[];
 }
 
 export interface Skill {
@@ -25,5 +42,5 @@ export interface Skill {
   name: string;
   icon: string;
   description: string;
-  questionCount: number;
+  questionCount: number | string;
 }
