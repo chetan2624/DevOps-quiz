@@ -126,11 +126,13 @@ const MCUQuiz: React.FC = () => {
     return (
       <ResultsScreen 
         score={quiz.score}
-        totalQuestions={quiz.selectedQuestions.length}
+        totalQuestions={quiz.isInterviewMode ? quiz.interviewQuestions.length : quiz.selectedQuestions.length}
         testLength={quiz.testLength}
         onRestart={quiz.restartQuiz}
         skillName={getSkillName(quiz.selectedSkill)}
         skillIcon={getSkillIcon(quiz.selectedSkill)}
+        isInterviewMode={quiz.isInterviewMode}
+        interviewFeedback={quiz.interviewFeedback}
       />
     );
   }

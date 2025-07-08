@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { QuizState, Question, InterviewQuestion } from '@/types/quiz';
 import { selectQuestions } from '@/data/questions';
@@ -52,23 +51,56 @@ const shuffleInterviewQuestions = (array: InterviewQuestion[]): InterviewQuestio
   return shuffled;
 };
 
-// Simple answer evaluation function
-const evaluateAnswer = (userAnswer: string, referenceAnswer: string): boolean => {
-  const userWords = userAnswer.toLowerCase().split(/\s+/);
-  const referenceWords = referenceAnswer.toLowerCase().split(/\s+/);
+// Enhanced answer evaluation function
+const evaluateAnswer = (userAnswer: string, referenceAnswer: string): { isValid: boolean; score: number } => {
+  const userText = userAnswer.toLowerCase().trim();
+  const referenceText = referenceAnswer.toLowerCase();
   
-  // Extract key concepts from reference answer
-  const keyWords = referenceWords.filter(word => 
-    word.length > 3 && 
-    !['kaise', 'karta', 'karte', 'karke', 'hote', 'hota', 'hai', 'the', 'and', 'for', 'with'].includes(word)
-  );
+  // Check for invalid responses
+  const invalidResponses = [
+    'nhi pata', 'nhi aata', 'dont know', 'no idea', 'not sure', 
+    'idk', 'dunno', 'nope', 'na', 'nahi', 'nothing', 'kuch nhi',
+    'kuch nahi', 'pata nahi', 'malum nahi', 'samajh nahi aaya'
+  ];
   
-  // Check if user answer contains at least 40% of key concepts
-  const matchedWords = keyWords.filter(word => 
-    userWords.some(userWord => userWord.includes(word) || word.includes(userWord))
-  );
+  // If answer is too short or contains invalid responses
+  if (userText.length < 10 || invalidResponses.some(invalid => userText.includes(invalid))) {
+    return { isValid: false, score: 0 };
+  }
   
-  return matchedWords.length >= Math.max(2, keyWords.length * 0.4);
+  // Extract key technical terms from reference answer
+  const technicalTerms = referenceText.match(/\b(kubernetes|docker|aws|s3|pod|container|bucket|service|deployment|node|cluster|yaml|json|api|cli|command|server|database|network|security|access|permission|policy|role|user|group|instance|volume|storage|memory|cpu|load|balancer|proxy|gateway|endpoint|port|protocol|http|https|ssl|tls|certificate|key|token|authentication|authorization|configuration|environment|variable|script|pipeline|build|deploy|monitor|log|metric|alert|dashboard|backup|restore|scale|replicate|sync|async|queue|cache|cdn|dns|domain|subdomain|firewall|vpc|subnet|route|table|elastic|lambda|ec2|rds|iam|cloudformation|terraform|ansible|jenkins|github|git|commit|push|pull|merge|branch|tag|release|version|ci|cd|devops|automation|orchestration|microservice|monolith|architecture|pattern|design|best|practice|troubleshoot|debug|error|exception|timeout|retry|circuit|breaker)\b/gi) || [];
+  
+  // Extract action words and concepts
+  const actionWords = referenceText.match(/\b(create|configure|setup|install|deploy|run|execute|start|stop|restart|update|upgrade|delete|remove|add|modify|change|edit|enable|disable|connect|disconnect|attach|detach|mount|unmount|expose|publish|bind|link|join|leave|scale|resize|migrate|backup|restore|clone|fork|merge|rebase|commit|push|pull|fetch|checkout|switch|branch|tag|release|build|compile|test|validate|verify|check|monitor|observe|track|trace|log|audit|secure|encrypt|decrypt|authenticate|authorize|grant|revoke|allow|deny|block|permit|restrict|limit|throttle|queue|cache|store|retrieve|fetch|query|search|filter|sort|group|aggregate|transform|parse|serialize|deserialize|encode|decode|compress|decompress|optimize|tune|configure|customize|integrate|implement|develop|code|script|automate|orchestrate|manage|administer|maintain|support|troubleshoot|debug|fix|resolve|handle|process|execute|invoke|trigger|schedule|batch|stream|async|sync|parallel|concurrent|sequential|linear|recursive|iterative)\b/gi) || [];
+  
+  const userWords = userText.split(/\s+/);
+  const referenceWords = referenceText.split(/\s+/);
+  
+  // Check for technical concept match
+  const technicalMatch = technicalTerms.filter(term => 
+    userWords.some(userWord => userWord.includes(term.toLowerCase()) || term.toLowerCase().includes(userWord))
+  ).length;
+  
+  // Check for approach/action match
+  const actionMatch = actionWords.filter(action => 
+    userWords.some(userWord => userWord.includes(action.toLowerCase()) || action.toLowerCase().includes(userWord))
+  ).length;
+  
+  // Calculate score based on matches
+  const technicalScore = technicalMatch / Math.max(1, technicalTerms.length);
+  const actionScore = actionMatch / Math.max(1, actionWords.length);
+  const overallScore = (technicalScore + actionScore) / 2;
+  
+  // Minimum thresholds for acceptance
+  const minScore = 0.3;
+  const hasBasicConcepts = technicalMatch >= 1;
+  const hasApproach = actionMatch >= 1 || userText.includes('step') || userText.includes('first') || userText.includes('then');
+  
+  return {
+    isValid: overallScore >= minScore && hasBasicConcepts && hasApproach,
+    score: Math.round(overallScore * 100)
+  };
 };
 
 export const useQuiz = () => {
@@ -161,14 +193,14 @@ export const useQuiz = () => {
   const submitTextAnswer = () => {
     if (quizState.isInterviewMode && quizState.currentAnswer.trim()) {
       const currentQ = quizState.interviewQuestions[quizState.currentQuestion];
-      const isCorrect = evaluateAnswer(quizState.currentAnswer, currentQ.referenceAnswer);
+      const evaluation = evaluateAnswer(quizState.currentAnswer, currentQ.referenceAnswer);
       
       const newTextAnswers = [...quizState.userTextAnswers];
       newTextAnswers[quizState.currentQuestion] = quizState.currentAnswer;
       
       const newFeedback = [...quizState.interviewFeedback];
       
-      if (isCorrect) {
+      if (evaluation.isValid) {
         newFeedback[quizState.currentQuestion] = 'correct';
         setQuizState(prev => ({
           ...prev,
@@ -179,7 +211,7 @@ export const useQuiz = () => {
           currentAnswer: '',
         }));
       } else if (currentQ.conditionalQuestion && !quizState.showConditionalQuestion) {
-        // Show conditional question
+        // Show conditional question for better evaluation
         setQuizState(prev => ({
           ...prev,
           userTextAnswers: newTextAnswers,
@@ -187,7 +219,7 @@ export const useQuiz = () => {
           currentAnswer: '',
         }));
       } else {
-        // Final attempt or no conditional question
+        // Final attempt failed or no conditional question
         newFeedback[quizState.currentQuestion] = quizState.showConditionalQuestion ? 'conditional_failed' : 'incorrect';
         setQuizState(prev => ({
           ...prev,
@@ -204,18 +236,19 @@ export const useQuiz = () => {
   const submitConditionalAnswer = () => {
     if (quizState.isInterviewMode && quizState.currentAnswer.trim()) {
       const currentQ = quizState.interviewQuestions[quizState.currentQuestion];
-      const isCorrect = currentQ.conditionalReferenceAnswer ? 
-        evaluateAnswer(quizState.currentAnswer, currentQ.conditionalReferenceAnswer) : false;
+      const evaluation = currentQ.conditionalReferenceAnswer ? 
+        evaluateAnswer(quizState.currentAnswer, currentQ.conditionalReferenceAnswer) : 
+        { isValid: false, score: 0 };
       
       const newFeedback = [...quizState.interviewFeedback];
-      newFeedback[quizState.currentQuestion] = isCorrect ? 'conditional_correct' : 'conditional_failed';
+      newFeedback[quizState.currentQuestion] = evaluation.isValid ? 'conditional_correct' : 'conditional_failed';
       
       setQuizState(prev => ({
         ...prev,
         interviewFeedback: newFeedback,
         answered: true,
         conditionalAnswered: true,
-        score: isCorrect ? prev.score + 1 : prev.score,
+        score: evaluation.isValid ? prev.score + 1 : prev.score,
         currentAnswer: '',
         showConditionalQuestion: false,
       }));
