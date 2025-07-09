@@ -96,12 +96,12 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       // Initialize EmailJS with your public key
       emailjs.init("tZWe34s-MZA-q5zwB");
       
-      console.log('Attempting to send email with service_q5gogur and template template_2k4tan5');
+      console.log('Attempting to send email with service_q5gogur and template template_ra1rago');
       
-      // Send email using EmailJS - trying with template_ prefix
+      // Send email using EmailJS with updated template ID
       await emailjs.send(
         "service_q5gogur",
-        "template_2k4tan5", // Adding template_ prefix as some EmailJS setups require it
+        "template_ra1rago",
         templateParams
       );
       
@@ -112,41 +112,11 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       });
     } catch (error) {
       console.error('Email sending failed:', error);
-      
-      // Try alternative template ID format
-      try {
-        console.log('Retrying with original template ID: 2k4tan5');
-        await emailjs.send(
-          "service_q5gogur",
-          "2k4tan5",
-          {
-            to_name: user.name,
-            to_email: user.email,
-            skill_name: skillName,
-            test_score: score,
-            total_questions: totalQuestions,
-            percentage: Math.round((score / totalQuestions) * 100),
-            test_length: testLength,
-            performance_analysis: getPerformanceAnalysis().performance,
-            improvements: getPerformanceAnalysis().improvements,
-            test_type: isInterviewMode ? 'Interview Practice' : 'Quiz Test',
-            date: new Date().toLocaleDateString(),
-          }
-        );
-        
-        setIsEmailSent(true);
-        toast({
-          title: "Report sent successfully!",
-          description: `Your ${skillName} quiz report has been sent to ${user.email}`,
-        });
-      } catch (retryError) {
-        console.error('Retry also failed:', retryError);
-        toast({
-          title: "Failed to send report",
-          description: "EmailJS template not found. Please check your EmailJS dashboard and ensure the template ID '2k4tan5' exists.",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Failed to send report",
+        description: "Please check your EmailJS configuration and try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSending(false);
     }
