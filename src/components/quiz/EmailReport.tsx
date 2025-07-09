@@ -64,20 +64,6 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       const { performance, improvements } = getPerformanceAnalysis();
       const percentage = Math.round((score / totalQuestions) * 100);
       
-      console.log('Sending email with parameters:', {
-        to_name: user.name,
-        to_email: user.email,
-        skill_name: skillName,
-        test_score: score,
-        total_questions: totalQuestions,
-        percentage: percentage,
-        test_length: testLength,
-        performance_analysis: performance,
-        improvements: improvements,
-        test_type: isInterviewMode ? 'Interview Practice' : 'Quiz Test',
-        date: new Date().toLocaleDateString(),
-      });
-      
       // EmailJS template parameters
       const templateParams = {
         to_name: user.name,
@@ -93,17 +79,22 @@ export const EmailReport: React.FC<EmailReportProps> = ({
         date: new Date().toLocaleDateString(),
       };
 
+      console.log('Sending email to:', user.email);
+      console.log('Template parameters:', templateParams);
+      
       // Initialize EmailJS with your public key
       emailjs.init("tZWe34s-MZA-q5zwB");
       
-      console.log('Attempting to send email with service_q5gogur and template template_ra1rago');
+      console.log('Sending email with service_q5gogur and template_ra1rago');
       
-      // Send email using EmailJS with updated template ID
-      await emailjs.send(
+      // Send email using EmailJS
+      const result = await emailjs.send(
         "service_q5gogur",
         "template_ra1rago",
         templateParams
       );
+      
+      console.log('Email sent successfully:', result);
       
       setIsEmailSent(true);
       toast({
@@ -114,7 +105,7 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       console.error('Email sending failed:', error);
       toast({
         title: "Failed to send report",
-        description: "Please check your EmailJS configuration and try again.",
+        description: "There was an error sending your report. Please try again.",
         variant: "destructive",
       });
     } finally {
