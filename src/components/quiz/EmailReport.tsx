@@ -80,12 +80,12 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       };
 
       // Initialize EmailJS with your public key
-      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY"); // You need to replace this with your actual public key
+      emailjs.init("tZWe34s-MZA-q5zwB");
       
       // Send email using EmailJS
       await emailjs.send(
-        "YOUR_SERVICE_ID", // You need to replace this with your EmailJS service ID
-        "YOUR_TEMPLATE_ID", // You need to replace this with your EmailJS template ID
+        "service_q5gogur", // Your Service ID
+        "2k4tan5", // Your Template ID
         templateParams
       );
       
@@ -98,7 +98,7 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       console.error('Email sending failed:', error);
       toast({
         title: "Failed to send report",
-        description: "Please check your email configuration and try again later.",
+        description: "Please try again later. If the problem persists, contact support.",
         variant: "destructive",
       });
     } finally {
