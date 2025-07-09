@@ -64,6 +64,20 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       const { performance, improvements } = getPerformanceAnalysis();
       const percentage = Math.round((score / totalQuestions) * 100);
       
+      console.log('Sending email with parameters:', {
+        to_name: user.name,
+        to_email: user.email,
+        skill_name: skillName,
+        test_score: score,
+        total_questions: totalQuestions,
+        percentage: percentage,
+        test_length: testLength,
+        performance_analysis: performance,
+        improvements: improvements,
+        test_type: isInterviewMode ? 'Interview Practice' : 'Quiz Test',
+        date: new Date().toLocaleDateString(),
+      });
+      
       // EmailJS template parameters
       const templateParams = {
         to_name: user.name,
@@ -82,10 +96,12 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       // Initialize EmailJS with your public key
       emailjs.init("tZWe34s-MZA-q5zwB");
       
-      // Send email using EmailJS
+      console.log('Attempting to send email with service_q5gogur and template template_2k4tan5');
+      
+      // Send email using EmailJS - trying with template_ prefix
       await emailjs.send(
-        "service_q5gogur", // Your Service ID
-        "2k4tan5", // Your Template ID
+        "service_q5gogur",
+        "template_2k4tan5", // Adding template_ prefix as some EmailJS setups require it
         templateParams
       );
       
@@ -96,11 +112,41 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       });
     } catch (error) {
       console.error('Email sending failed:', error);
-      toast({
-        title: "Failed to send report",
-        description: "Please try again later. If the problem persists, contact support.",
-        variant: "destructive",
-      });
+      
+      // Try alternative template ID format
+      try {
+        console.log('Retrying with original template ID: 2k4tan5');
+        await emailjs.send(
+          "service_q5gogur",
+          "2k4tan5",
+          {
+            to_name: user.name,
+            to_email: user.email,
+            skill_name: skillName,
+            test_score: score,
+            total_questions: totalQuestions,
+            percentage: Math.round((score / totalQuestions) * 100),
+            test_length: testLength,
+            performance_analysis: getPerformanceAnalysis().performance,
+            improvements: getPerformanceAnalysis().improvements,
+            test_type: isInterviewMode ? 'Interview Practice' : 'Quiz Test',
+            date: new Date().toLocaleDateString(),
+          }
+        );
+        
+        setIsEmailSent(true);
+        toast({
+          title: "Report sent successfully!",
+          description: `Your ${skillName} quiz report has been sent to ${user.email}`,
+        });
+      } catch (retryError) {
+        console.error('Retry also failed:', retryError);
+        toast({
+          title: "Failed to send report",
+          description: "EmailJS template not found. Please check your EmailJS dashboard and ensure the template ID '2k4tan5' exists.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSending(false);
     }
