@@ -94,6 +94,11 @@ const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack }
     }
   };
 
+  const handleBackClick = () => {
+    // Reset to start screen by calling onBack which should reset the quiz state
+    onBack();
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
@@ -132,10 +137,10 @@ const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack }
         
         <div className="text-center">
           <button
-            onClick={onBack}
+            onClick={handleBackClick}
             className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transform transition-all duration-300"
           >
-            Back
+            Back to Home
           </button>
         </div>
       </div>
