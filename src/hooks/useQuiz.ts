@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { QuizState, Question, InterviewQuestion } from '@/types/quiz';
 import { selectQuestions } from '@/data/questions';
@@ -52,13 +51,16 @@ const shuffleInterviewQuestions = (array: InterviewQuestion[]): InterviewQuestio
   return shuffled;
 };
 
-// Enhanced answer evaluation function
+// Enhanced answer evaluation function for "Mere waale questions"
 const evaluateAnswer = (userAnswer: string, referenceAnswer: string, questionText: string): { isValid: boolean; score: number } => {
   const userText = userAnswer.toLowerCase().trim();
-  const referenceText = referenceAnswer.toLowerCase();
   const questionLower = questionText.toLowerCase();
   
-  // Check for invalid responses
+  console.log('=== Answer Evaluation Debug ===');
+  console.log('User Answer:', userAnswer.substring(0, 150) + '...');
+  console.log('Answer Length:', userAnswer.length);
+  
+  // Check for invalid responses first
   const invalidResponses = [
     'nhi pata', 'nhi aata', 'dont know', 'no idea', 'not sure', 
     'idk', 'dunno', 'nope', 'na', 'nahi', 'nothing', 'kuch nhi',
@@ -66,84 +68,133 @@ const evaluateAnswer = (userAnswer: string, referenceAnswer: string, questionTex
   ];
   
   // If answer is too short or contains invalid responses
-  if (userText.length < 15 || invalidResponses.some(invalid => userText.includes(invalid))) {
+  if (userText.length < 20 || invalidResponses.some(invalid => userText.includes(invalid))) {
+    console.log('❌ Rejected: Too short or invalid response');
     return { isValid: false, score: 0 };
   }
   
-  // Extract key technical terms from question and reference answer
-  const questionKeywords = [...questionLower.match(/\b(kubernetes|docker|aws|s3|pod|container|bucket|service|deployment|node|cluster|linux|git|github|jenkins|terraform|datadog|monitoring|ci|cd|devops|merge|rebase|pipeline|declarative|scripted|state|file|process|dns|discovery|microservice|testing|zero-downtime|blue-green|rolling)\b/gi) || []];
-  
-  // Get broader technical vocabulary from both question and reference
-  const technicalTerms = [
-    // Kubernetes terms
-    ...userText.match(/\b(pod|container|service|deployment|namespace|configmap|secret|ingress|nodeport|clusterip|loadbalancer|replica|scale|kubectl|yaml|manifest|endpoint|selector|label|annotation|volume|persistentvolume|storageclass|statefulset|daemonset|job|cronjob)\b/gi) || [],
-    // AWS terms
-    ...userText.match(/\b(s3|bucket|ec2|instance|lambda|cloudformation|iam|role|policy|vpc|subnet|security|group|load|balancer|route53|cloudfront|rds|dynamodb|elasticache|eks|fargate|ecs)\b/gi) || [],
-    // Docker terms
-    ...userText.match(/\b(container|image|dockerfile|docker|compose|volume|network|port|expose|bind|mount|registry|hub|build|run|exec|logs|inspect)\b/gi) || [],
-    // Git terms
-    ...userText.match(/\b(git|commit|push|pull|merge|rebase|branch|checkout|clone|fork|remote|origin|upstream|conflict|resolve|stash|cherry-pick|squash|reset|head|master|main)\b/gi) || [],
-    // DevOps terms
-    ...userText.match(/\b(ci|cd|pipeline|build|deploy|test|automation|monitoring|logging|alert|dashboard|infrastructure|terraform|ansible|jenkins|github|actions|workflow)\b/gi) || [],
-    // Linux terms
-    ...userText.match(/\b(linux|ubuntu|centos|bash|shell|command|file|directory|permission|chmod|chown|ps|top|grep|awk|sed|pipe|redirect|cron|systemctl|service|process|daemon)\b/gi) || []
+  // Check for step-wise or point-wise structure (KEY REQUIREMENT)
+  const stepPatterns = [
+    /step\s*\d+/gi,           // "step 1", "step 2"
+    /\d+\.\s+/g,              // "1. ", "2. "
+    /point\s*\d+/gi,          // "point 1", "point 2"
+    /pehle/gi,                // "pehle" (first in Hindi)
+    /phir/gi,                 // "phir" (then in Hindi)
+    /baad\s*me/gi,            // "baad me" (later in Hindi)
+    /→|->|\|/g                // Arrow symbols or pipes
   ];
   
-  // Check for structured answer patterns
-  const stepPatterns = userText.match(/\b(step\s*\d+|first|second|third|fourth|fifth|then|next|after|finally|lastly|\d+\.|•|→|->|pehle|phir|baad|me|fir)\b/gi) || [];
-  const hasMultipleLines = userText.split(/[\n.]/).filter(line => line.trim().length > 10).length >= 3;
-  const hasStructuredFormat = stepPatterns.length >= 2 || hasMultipleLines;
+  const hasStepStructure = stepPatterns.some(pattern => pattern.test(userAnswer));
+  const stepMatches = userAnswer.match(/step\s*\d+|pehle|phir|baad\s*me|\d+\./gi) || [];
+  const hasMultipleSteps = stepMatches.length >= 2;
   
-  // Check for action/process words
-  const actionWords = [...userText.match(/\b(create|banate|configure|setup|install|deploy|run|start|enable|connect|expose|mount|scale|update|delete|add|modify|use|implement|apply|execute|manage|monitor|check|verify|troubleshoot|debug|resolve|handle|process|build|test|validate)\b/gi) || []];
+  console.log('Step Structure Check:', { hasStepStructure, stepMatches, hasMultipleSteps });
   
-  // Topic relevance check - ensure answer is about the right topic
-  let topicRelevance = 0;
-  if (questionKeywords.length > 0) {
-    const matchedKeywords = questionKeywords.filter(keyword => userText.includes(keyword.toLowerCase()));
-    topicRelevance = matchedKeywords.length / questionKeywords.length;
+  // Check for Hinglish language patterns
+  const hinglishPatterns = [
+    // Common Hinglish words
+    /\b(hai|hota|hote|karte|karna|banate|banana|use|kar|sakte|matlab|sabse|zyada|chhota|basic|mai|me|se|ke|ka|ki|aur|ya|jo|jaise|sath|through|provide|share|run|create|example|command)\b/gi,
+    // Technical + Hindi mixed
+    /kubernetes\s+(mai|me|ka|ke)/gi,
+    /container\s+(hai|hote|karte)/gi,
+    /pod\s+(hai|hota|kya)/gi,
+    /command\s+(hai|hota)/gi
+  ];
+  
+  const hinglishMatches = hinglishPatterns.reduce((count, pattern) => {
+    const matches = userAnswer.match(pattern) || [];
+    return count + matches.length;
+  }, 0);
+  
+  const hasHinglishTone = hinglishMatches >= 3; // At least 3 Hinglish patterns
+  
+  console.log('Hinglish Check:', { hinglishMatches, hasHinglishTone });
+  
+  // Check for technical terms related to the question
+  const technicalTerms = [
+    ...userText.match(/\b(pod|container|kubernetes|docker|service|deployment|image|command|kubectl|run|nginx|yaml|network|storage|volume|namespace|cluster|node)\b/gi) || [],
+    ...userText.match(/\b(aws|s3|bucket|ec2|lambda|git|github|push|pull|merge|branch|commit|terraform|jenkins|pipeline|ci|cd|monitoring|datadog)\b/gi) || []
+  ];
+  
+  const hasTechnicalContent = technicalTerms.length >= 2;
+  
+  console.log('Technical Content:', { technicalTerms: technicalTerms.slice(0, 5), hasTechnicalContent });
+  
+  // Check for commands or examples (important for DevOps questions)
+  const hasCommandExample = /kubectl|docker|git|aws|terraform|jenkins/i.test(userAnswer) && 
+                           (/```|`|command:|example:/i.test(userAnswer) || /kubectl\s+\w+|docker\s+\w+|git\s+\w+/i.test(userAnswer));
+  
+  console.log('Command/Example Check:', hasCommandExample);
+  
+  // Check if answer is relevant to the question topic
+  const questionKeywords = [...questionLower.match(/\b(kubernetes|docker|aws|git|github|terraform|jenkins|datadog|pod|container|service|deployment)\b/gi) || []];
+  const relevantToTopic = questionKeywords.length === 0 || 
+                         questionKeywords.some(keyword => userText.includes(keyword.toLowerCase()));
+  
+  console.log('Topic Relevance:', { questionKeywords, relevantToTopic });
+  
+  // NEW SCORING LOGIC - More specific to "Mere waale questions" format
+  let totalScore = 0;
+  let maxScore = 100;
+  
+  // 1. Step-wise structure (40 points) - MOST IMPORTANT
+  if (hasStepStructure && hasMultipleSteps) {
+    totalScore += 40;
+    console.log('✅ +40 points: Good step structure');
+  } else if (hasStepStructure) {
+    totalScore += 20;
+    console.log('✅ +20 points: Some step structure');
   } else {
-    // If no specific keywords, check if answer is generally DevOps related
-    topicRelevance = technicalTerms.length > 0 ? 1 : 0;
+    console.log('❌ 0 points: No step structure');
   }
   
-  // Concept understanding check
-  const conceptScore = technicalTerms.length / Math.max(1, userText.split(' ').length * 0.1); // Normalize by answer length
-  const actionScore = actionWords.length >= 2 ? 1 : actionWords.length * 0.5;
-  const structureScore = hasStructuredFormat ? 1 : 0.3;
+  // 2. Hinglish tone (25 points) - VERY IMPORTANT
+  if (hasHinglishTone) {
+    totalScore += 25;
+    console.log('✅ +25 points: Good Hinglish tone');
+  } else {
+    console.log('❌ 0 points: No Hinglish tone');
+  }
   
-  // Enhanced scoring with better weights
-  const overallScore = (topicRelevance * 0.4) + (conceptScore * 0.3) + (structureScore * 0.2) + (actionScore * 0.1);
+  // 3. Technical content (20 points)
+  if (hasTechnicalContent) {
+    totalScore += 20;
+    console.log('✅ +20 points: Good technical content');
+  } else {
+    console.log('❌ 0 points: Lacks technical content');
+  }
   
-  // More flexible validation criteria
-  const hasRelevantConcepts = technicalTerms.length >= 2 || topicRelevance >= 0.5;
-  const hasProperStructure = hasStructuredFormat && userText.length >= 50;
-  const isTopicRelevant = topicRelevance >= 0.3; // More lenient topic matching
-  const hasMinimumDepth = userText.split(' ').length >= 20; // At least 20 words
+  // 4. Command/Example (10 points)
+  if (hasCommandExample) {
+    totalScore += 10;
+    console.log('✅ +10 points: Includes command/example');
+  }
   
-  // Accept answer if it meets these criteria
-  const isValid = (hasRelevantConcepts && hasProperStructure && isTopicRelevant && hasMinimumDepth) || 
-                  (overallScore >= 0.4 && hasMinimumDepth && isTopicRelevant);
+  // 5. Topic relevance (5 points)
+  if (relevantToTopic) {
+    totalScore += 5;
+    console.log('✅ +5 points: Relevant to topic');
+  }
   
-  console.log('Answer Evaluation Debug:', {
-    userText: userText.substring(0, 100) + '...',
-    technicalTerms: technicalTerms.slice(0, 5),
-    questionKeywords,
-    topicRelevance,
-    conceptScore,
-    structureScore,
-    actionScore,
-    overallScore,
-    isValid,
-    hasRelevantConcepts,
-    hasProperStructure,
-    isTopicRelevant,
-    hasMinimumDepth
-  });
+  const finalScore = Math.round((totalScore / maxScore) * 100);
+  
+  // ACCEPTANCE CRITERIA for "Mere waale questions":
+  // Must have step structure + Hinglish tone + basic technical content
+  const meetsBasicRequirements = hasStepStructure && hasHinglishTone && hasTechnicalContent && relevantToTopic;
+  const meetsMinimumScore = totalScore >= 60; // At least 60/100 points
+  
+  const isValid = meetsBasicRequirements && meetsMinimumScore;
+  
+  console.log('=== Final Evaluation ===');
+  console.log('Total Score:', totalScore, '/ 100');
+  console.log('Meets Basic Requirements:', meetsBasicRequirements);
+  console.log('Meets Minimum Score:', meetsMinimumScore);
+  console.log('Final Decision:', isValid ? '✅ ACCEPTED' : '❌ REJECTED');
+  console.log('========================');
   
   return {
     isValid,
-    score: Math.round(overallScore * 100)
+    score: finalScore
   };
 };
 
