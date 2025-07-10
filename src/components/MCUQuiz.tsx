@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useQuiz } from '@/hooks/useQuiz';
@@ -110,6 +109,7 @@ const MCUQuiz: React.FC = () => {
       <SkillSelection 
         onSelectSkill={quiz.selectSkill}
         onBack={() => quiz.exitQuiz()}
+        restartQuiz={quiz.restartQuiz}
       />
     );
   }
