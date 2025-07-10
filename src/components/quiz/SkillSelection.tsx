@@ -5,6 +5,7 @@ import { Skill } from '@/types/quiz';
 interface SkillSelectionProps {
   onSelectSkill: (skillId: string) => void;
   onBack: () => void;
+  restartQuiz: () => void;
 }
 
 const skills: Skill[] = [
@@ -73,7 +74,7 @@ const skills: Skill[] = [
   }
 ];
 
-const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack }) => {
+const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack, restartQuiz }) => {
   const particlesRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -95,8 +96,8 @@ const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack }
   };
 
   const handleBackClick = () => {
-    // Reset to start screen by calling onBack which should reset the quiz state
-    onBack();
+    // Reset to start screen by calling restartQuiz which resets the entire quiz state
+    restartQuiz();
   };
 
   return (
