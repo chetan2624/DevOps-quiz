@@ -1,6 +1,8 @@
 
 import React, { useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { Button } from '@/components/ui/button';
 
 interface StartScreenProps {
   onStartTestSelection: () => void;
@@ -8,6 +10,7 @@ interface StartScreenProps {
 
 const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
   const particlesRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     createParticles();
@@ -30,8 +33,16 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
       {/* Auth Header */}
-      <div className="absolute top-4 right-4 z-20">
+      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2">
         <AuthHeader />
+        <Button
+          onClick={() => navigate('/blog')}
+          variant="outline"
+          size="sm"
+          className="text-white border-white hover:bg-white hover:text-gray-900"
+        >
+          Blog
+        </Button>
       </div>
       
       <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
