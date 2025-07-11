@@ -63,12 +63,13 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				marvel: {
-					red: '#E23636',
-					gold: '#FFD700',
-					blue: '#1E3A8A',
-					purple: '#7C3AED',
-					cosmic: '#8B5CF6'
+				quiz: {
+					primary: 'hsl(var(--quiz-primary))',
+					secondary: 'hsl(var(--quiz-secondary))',
+					accent: 'hsl(var(--quiz-accent))',
+					success: 'hsl(var(--quiz-success))',
+					warning: 'hsl(var(--quiz-warning))',
+					error: 'hsl(var(--quiz-error))'
 				}
 			},
 			borderRadius: {
@@ -94,24 +95,58 @@ export default {
 					}
 				},
 				'float': {
-					'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-					'50%': { transform: 'translateY(-20px) rotate(180deg)' }
+					'0%, 100%': { 
+						transform: 'translateY(0px) rotate(0deg)',
+						opacity: '1'
+					},
+					'50%': { 
+						transform: 'translateY(-10px) rotate(5deg)',
+						opacity: '0.8'
+					}
 				},
-				'shimmer': {
-					'0%': { left: '-100%' },
-					'100%': { left: '100%' }
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(20px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
 				},
-				'pulse-glow': {
-					'0%, 100%': { boxShadow: '0 0 20px rgba(226, 54, 54, 0.5)' },
-					'50%': { boxShadow: '0 0 40px rgba(226, 54, 54, 0.8)' }
+				'slide-up': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(30px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'scale-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'scale(0.95)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'scale(1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'float': 'float 6s infinite ease-in-out',
-				'shimmer': 'shimmer 2s infinite',
-				'pulse-glow': 'pulse-glow 2s infinite'
+				'float': 'float 6s ease-in-out infinite',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'slide-up': 'slide-up 0.6s ease-out',
+				'scale-in': 'scale-in 0.3s ease-out'
+			},
+			boxShadow: {
+				'modern': '0 4px 20px rgba(0, 0, 0, 0.08)',
+				'modern-hover': '0 8px 30px rgba(0, 0, 0, 0.12)',
+				'glass': '0 8px 32px rgba(0, 0, 0, 0.1)'
 			}
 		}
 	},

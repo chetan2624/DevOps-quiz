@@ -3,50 +3,52 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Modern Professional Quiz App Design System */
 
 @layer base {
   :root {
-    --background: 222 84% 5%;
-    --foreground: 210 40% 98%;
+    /* Primary brand colors - Modern blue gradient */
+    --background: 220 15% 95%;
+    --foreground: 220 20% 15%;
 
-    --card: 222 84% 5%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 15%;
 
-    --popover: 222 84% 5%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 15%;
 
-    --primary: 0 84% 60%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary brand - Professional blue */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 32% 17%;
-    --secondary-foreground: 210 40% 98%;
+    /* Secondary - Light blue/gray */
+    --secondary: 220 15% 95%;
+    --secondary-foreground: 220 20% 25%;
 
-    --muted: 217 32% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 220 10% 92%;
+    --muted-foreground: 220 15% 45%;
 
-    --accent: 217 32% 17%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 217 91% 95%;
+    --accent-foreground: 217 91% 60%;
 
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217 32% 17%;
-    --input: 217 32% 17%;
-    --ring: 212 26% 83%;
+    --border: 220 10% 88%;
+    --input: 220 10% 88%;
+    --ring: 217 91% 60%;
 
-    --radius: 0.5rem;
+    --radius: 12px;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Custom quiz theme colors */
+    --quiz-primary: 217 91% 60%;
+    --quiz-secondary: 217 91% 95%;
+    --quiz-accent: 34 100% 50%;
+    --quiz-success: 142 71% 45%;
+    --quiz-warning: 38 92% 50%;
+    --quiz-error: 0 72% 51%;
+    --quiz-gradient-start: 217 91% 60%;
+    --quiz-gradient-end: 225 73% 57%;
   }
 }
 
@@ -58,42 +60,94 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.2;
   }
 }
 
 @layer components {
-  .marvel-gradient {
-    background: linear-gradient(135deg, #E23636 0%, #FFD700 50%, #1E3A8A 100%);
+  /* Modern gradient backgrounds */
+  .quiz-gradient {
+    background: linear-gradient(135deg, hsl(var(--quiz-gradient-start)) 0%, hsl(var(--quiz-gradient-end)) 100%);
   }
   
-  .cosmic-gradient {
-    background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 50%, #A855F7 100%);
+  .quiz-gradient-light {
+    background: linear-gradient(135deg, hsl(var(--quiz-secondary)) 0%, hsl(var(--background)) 100%);
   }
   
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+  /* Glass morphism effect */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
   
-  .particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(255, 215, 0, 0.8);
-    border-radius: 50%;
-    animation: float 6s infinite ease-in-out;
+  /* Modern card styling */
+  .modern-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
   }
   
-  .progress-shimmer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: shimmer 2s infinite;
+  .modern-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+  
+  /* Button styles */
+  .btn-primary {
+    background: hsl(var(--quiz-primary));
+    color: hsl(var(--primary-foreground));
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background: hsl(var(--quiz-primary) / 0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px hsl(var(--quiz-primary) / 0.3);
+  }
+  
+  /* Floating elements animation */
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Success/Error states */
+  .success-state {
+    background: hsl(var(--quiz-success) / 0.1);
+    border-color: hsl(var(--quiz-success));
+    color: hsl(var(--quiz-success));
+  }
+  
+  .error-state {
+    background: hsl(var(--quiz-error) / 0.1);
+    border-color: hsl(var(--quiz-error));
+    color: hsl(var(--quiz-error));
+  }
+  
+  /* Progress indicators */
+  .progress-modern {
+    background: hsl(var(--muted));
+    border-radius: 50px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    background: linear-gradient(90deg, hsl(var(--quiz-primary)), hsl(var(--quiz-accent)));
+    transition: width 0.3s ease;
+    border-radius: 50px;
   }
 }
 

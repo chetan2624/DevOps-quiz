@@ -1,6 +1,8 @@
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { Skill } from '@/types/quiz';
+import { Button } from '@/components/ui/button'; 
+import { ArrowLeft, Users } from 'lucide-react';
 
 interface SkillSelectionProps {
   onSelectSkill: (skillId: string) => void;
@@ -67,7 +69,7 @@ const skills: Skill[] = [
   },
   {
     id: 'interview',
-    name: 'Mere waale questions',
+    name: 'Interview Practice',
     icon: '🧠',
     description: 'Open-ended interview questions in Hinglish - Real interview experience',
     questionCount: '10 Interactive'
@@ -75,74 +77,71 @@ const skills: Skill[] = [
 ];
 
 const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack, restartQuiz }) => {
-  const particlesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    createParticles();
-  }, []);
-
-  const createParticles = () => {
-    if (particlesRef.current) {
-      for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        particlesRef.current.appendChild(particle);
-      }
-    }
-  };
-
   const handleBackClick = () => {
-    // Reset to start screen by calling restartQuiz which resets the entire quiz state
     restartQuiz();
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
-      <div className="absolute inset-0 cosmic-gradient opacity-90" />
-      
-      <div className="glass-effect rounded-3xl p-8 max-w-6xl mx-4 relative z-10">
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold text-white mb-4">Choose Your DevOps Skill</h2>
-          <p className="text-xl text-gray-300">
-            Select a technology to test your knowledge with interview-style questions
+    <div className="min-h-screen bg-gradient-to-br from-quiz-secondary to-background">
+      {/* Navigation Header */}
+      <nav className="flex justify-between items-center p-6">
+        <Button
+          variant="outline"
+          onClick={handleBackClick}
+          className="border-quiz-primary/30 text-quiz-primary hover:bg-quiz-primary hover:text-white"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Home
+        </Button>
+      </nav>
+
+      <div className="container mx-auto px-6 py-12">
+        {/* Header Section */}
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Choose Your DevOps Skill
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Select a technology to test your knowledge with comprehensive interview-style questions.
+            Each skill contains real-world scenarios you'll encounter in DevOps interviews.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {skills.map((skill) => (
-            <button
+
+        {/* Skills Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
+          {skills.map((skill, index) => (
+            <div
               key={skill.id}
+              className="modern-card rounded-2xl p-6 hover:border-quiz-primary/30 transition-all duration-300 hover:scale-105 cursor-pointer group animate-scale-in"
+              style={{ animationDelay: `${index * 0.05}s` }}
               onClick={() => onSelectSkill(skill.id)}
-              className="glass-effect border-2 border-gray-600 hover:border-marvel-gold p-6 rounded-2xl text-white hover:bg-white/10 transition-all duration-300 hover:scale-105 group"
             >
-              <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                {skill.icon}
+              <div className="text-center">
+                <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                  {skill.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-quiz-primary transition-colors">
+                  {skill.name}
+                </h3>
+                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                  {skill.description}
+                </p>
+                <div className="flex items-center justify-center text-xs text-quiz-primary font-medium bg-quiz-secondary rounded-full px-3 py-1">
+                  <Users className="w-3 h-3 mr-1" />
+                  {skill.questionCount} Questions
+                </div>
               </div>
-              <div className="text-xl font-bold text-marvel-gold mb-2">
-                {skill.name}
-              </div>
-              <div className="text-sm text-gray-300 mb-3">
-                {skill.description}
-              </div>
-              <div className="text-xs text-gray-400">
-                {skill.questionCount} Questions Available
-              </div>
-            </button>
+            </div>
           ))}
         </div>
-        
-        <div className="text-center">
-          <button
-            onClick={handleBackClick}
-            className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transform transition-all duration-300"
-          >
-            Back to Home
-          </button>
+
+        {/* Info Card */}
+        <div className="modern-card rounded-2xl p-6 max-w-2xl mx-auto text-center">
+          <h3 className="font-semibold text-foreground mb-3">Why Practice DevOps Skills?</h3>
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            Each skill section contains carefully curated questions that mirror real interview scenarios. 
+            Practice with different question lengths and track your progress across all DevOps domains.
+          </p>
         </div>
       </div>
     </div>
