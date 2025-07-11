@@ -48,13 +48,13 @@ const TestSelection: React.FC<TestSelectionProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-quiz-secondary to-background">
+    <div className="min-h-screen cosmic-gradient">
       {/* Navigation Header */}
       <nav className="flex justify-between items-center p-6">
         <Button
           variant="outline"
           onClick={onBack}
-          className="border-quiz-primary/30 text-quiz-primary hover:bg-quiz-primary hover:text-white"
+          className="border-quiz-primary text-quiz-primary hover:bg-quiz-primary hover:text-white"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Skills
@@ -80,23 +80,23 @@ const TestSelection: React.FC<TestSelectionProps> = ({
           {testOptions.map((option, index) => (
             <div 
               key={option.questions}
-              className={`modern-card rounded-3xl p-8 text-center hover:border-${option.color}/30 transition-all duration-300 hover:scale-105 cursor-pointer relative animate-scale-in`}
+              className="modern-card rounded-3xl p-8 text-center hover:border-quiz-primary/30 transition-all duration-300 hover:scale-105 cursor-pointer relative animate-scale-in"
               style={{ animationDelay: `${index * 0.1}s` }}
               onClick={() => onSelectTest(option.questions)}
             >
               {option.recommended && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <div className={`bg-quiz-primary text-white px-4 py-1 rounded-full text-sm font-medium`}>
+                  <div className="bg-quiz-primary text-white px-4 py-1 rounded-full text-sm font-medium">
                     Recommended
                   </div>
                 </div>
               )}
               
-              <div className={`w-16 h-16 bg-quiz-secondary rounded-2xl flex items-center justify-center mx-auto mb-6`}>
-                <option.icon className={`w-8 h-8 text-${option.color}`} />
+              <div className="w-16 h-16 bg-quiz-secondary rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <option.icon className="w-8 h-8 text-quiz-primary" />
               </div>
               
-              <div className={`text-4xl font-bold text-${option.color} mb-2`}>
+              <div className="text-4xl font-bold text-quiz-primary mb-2">
                 {option.questions}
               </div>
               <div className="text-sm text-muted-foreground mb-4">Questions</div>
@@ -114,7 +114,7 @@ const TestSelection: React.FC<TestSelectionProps> = ({
               </div>
               
               <Button 
-                className={`w-full btn-primary rounded-xl`}
+                className="w-full btn-primary rounded-xl"
                 onClick={() => onSelectTest(option.questions)}
               >
                 Start {option.questions} Questions

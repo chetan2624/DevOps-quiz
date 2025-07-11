@@ -8,41 +8,41 @@
 @layer base {
   :root {
     /* Primary brand colors - Modern blue gradient */
-    --background: 220 15% 95%;
-    --foreground: 220 20% 15%;
+    --background: 220 15% 8%;
+    --foreground: 220 20% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 15%;
+    --card: 220 15% 12%;
+    --card-foreground: 220 20% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 15%;
+    --popover: 220 15% 12%;
+    --popover-foreground: 220 20% 95%;
 
     /* Primary brand - Professional blue */
     --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 220 20% 95%;
 
-    /* Secondary - Light blue/gray */
-    --secondary: 220 15% 95%;
-    --secondary-foreground: 220 20% 25%;
+    /* Secondary - Dark blue/gray */
+    --secondary: 220 15% 15%;
+    --secondary-foreground: 220 20% 85%;
 
-    --muted: 220 10% 92%;
-    --muted-foreground: 220 15% 45%;
+    --muted: 220 10% 20%;
+    --muted-foreground: 220 15% 65%;
 
-    --accent: 217 91% 95%;
-    --accent-foreground: 217 91% 60%;
+    --accent: 217 91% 25%;
+    --accent-foreground: 217 91% 95%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 220 20% 95%;
 
-    --border: 220 10% 88%;
-    --input: 220 10% 88%;
+    --border: 220 10% 25%;
+    --input: 220 10% 25%;
     --ring: 217 91% 60%;
 
     --radius: 12px;
 
     /* Custom quiz theme colors */
     --quiz-primary: 217 91% 60%;
-    --quiz-secondary: 217 91% 95%;
+    --quiz-secondary: 220 15% 15%;
     --quiz-accent: 34 100% 50%;
     --quiz-success: 142 71% 45%;
     --quiz-warning: 38 92% 50%;
@@ -61,6 +61,8 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     line-height: 1.6;
+    background: linear-gradient(135deg, hsl(220 15% 8%) 0%, hsl(220 15% 12%) 100%);
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -71,6 +73,10 @@
 
 @layer components {
   /* Modern gradient backgrounds */
+  .cosmic-gradient {
+    background: linear-gradient(135deg, hsl(220 15% 8%) 0%, hsl(220 15% 12%) 50%, hsl(217 91% 10%) 100%);
+  }
+  
   .quiz-gradient {
     background: linear-gradient(135deg, hsl(var(--quiz-gradient-start)) 0%, hsl(var(--quiz-gradient-end)) 100%);
   }
@@ -81,22 +87,29 @@
   
   /* Glass morphism effect */
   .glass-card {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
   
   /* Modern card styling */
   .modern-card {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
   }
   
   .modern-card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     transform: translateY(-2px);
   }
   
@@ -114,9 +127,10 @@
     box-shadow: 0 4px 15px hsl(var(--quiz-primary) / 0.3);
   }
   
-  /* Floating elements animation */
+  /* Floating elements animation - NOT STICKY */
   .float-animation {
     animation: float 6s ease-in-out infinite;
+    position: absolute;
   }
   
   @keyframes float {
@@ -148,6 +162,52 @@
     background: linear-gradient(90deg, hsl(var(--quiz-primary)), hsl(var(--quiz-accent)));
     transition: width 0.3s ease;
     border-radius: 50px;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
 

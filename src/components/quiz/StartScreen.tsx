@@ -43,7 +43,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-quiz-secondary to-background">
+    <div className="min-h-screen cosmic-gradient">
       {/* Navigation Header */}
       <nav className="flex justify-between items-center p-6 relative z-10">
         <div className="flex items-center space-x-2">
@@ -67,7 +67,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
       </nav>
 
       {/* Hero Section */}
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-6 py-12 relative">
         <div className="text-center mb-16 animate-fade-in">
           <div className="inline-flex items-center bg-quiz-secondary border border-quiz-primary/20 rounded-full px-4 py-2 mb-6">
             <Star className="w-4 h-4 text-quiz-accent mr-2" />
@@ -142,10 +142,8 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
             Begin Your Journey
           </Button>
         </div>
-      </div>
 
-      {/* Floating decorative elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Non-sticky floating decorative elements */}
         <div className="absolute top-20 left-10 w-20 h-20 bg-quiz-accent/10 rounded-full float-animation"></div>
         <div className="absolute top-40 right-20 w-16 h-16 bg-quiz-primary/10 rounded-full float-animation" style={{ animationDelay: '2s' }}></div>
         <div className="absolute bottom-40 left-20 w-12 h-12 bg-quiz-success/10 rounded-full float-animation" style={{ animationDelay: '4s' }}></div>

@@ -12,9 +12,9 @@ interface BlogSidebarProps {
 export const BlogSidebar: React.FC<BlogSidebarProps> = ({ selectedTopic, onTopicSelect }) => {
   return (
     <aside className="w-64 flex-shrink-0">
-      <Card className="glass-effect border-white/20">
+      <Card className="modern-card border-border">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-white">
+          <CardTitle className="flex items-center gap-2 text-foreground">
             <Package className="h-5 w-5" />
             Packages
           </CardTitle>
@@ -22,14 +22,14 @@ export const BlogSidebar: React.FC<BlogSidebarProps> = ({ selectedTopic, onTopic
         <CardContent className="space-y-2">
           <Button
             variant={selectedTopic === 'overview' ? 'default' : 'ghost'}
-            className="w-full justify-start text-white hover:bg-white/10"
+            className="w-full justify-start text-foreground hover:bg-muted"
             onClick={() => onTopicSelect('overview')}
           >
             Overview
           </Button>
           <Button
             variant={selectedTopic === 'sonarqube' ? 'default' : 'ghost'}
-            className="w-full justify-start text-white hover:bg-white/10"
+            className="w-full justify-start text-foreground hover:bg-muted"
             onClick={() => onTopicSelect('sonarqube')}
           >
             <Server className="h-4 w-4 mr-2" />

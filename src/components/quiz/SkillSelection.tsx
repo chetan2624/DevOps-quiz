@@ -82,13 +82,13 @@ const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack, 
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-quiz-secondary to-background">
+    <div className="min-h-screen cosmic-gradient">
       {/* Navigation Header */}
       <nav className="flex justify-between items-center p-6">
         <Button
           variant="outline"
           onClick={handleBackClick}
-          className="border-quiz-primary/30 text-quiz-primary hover:bg-quiz-primary hover:text-white"
+          className="border-quiz-primary text-quiz-primary hover:bg-quiz-primary hover:text-white"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Home
