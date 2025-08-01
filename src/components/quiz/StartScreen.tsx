@@ -2,6 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Users, Trophy, Clock, ChevronRight, Play, Star, Target } from 'lucide-react';
 
@@ -54,11 +55,12 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
         </div>
         
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Button
             onClick={() => navigate('/blog')}
             variant="outline"
             size="sm"
-            className="border-quiz-primary text-quiz-primary hover:bg-quiz-primary hover:text-white"
+            className="border-primary text-foreground hover:text-primary hover:border-primary hover:bg-primary/10"
           >
             Blog
           </Button>

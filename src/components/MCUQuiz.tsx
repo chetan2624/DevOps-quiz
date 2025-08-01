@@ -165,7 +165,7 @@ const MCUQuiz: React.FC = () => {
         <div ref={quizContainerRef} className="glass-effect rounded-3xl p-8 max-w-4xl mx-4 relative z-10 w-full">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold marvel-gradient bg-clip-text text-transparent mb-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-quiz-accent bg-clip-text text-transparent mb-4">
               🧠 Mere waale questions - Interview Mode
             </h1>
             <div className="text-white text-lg">
@@ -244,7 +244,7 @@ const MCUQuiz: React.FC = () => {
       <div ref={quizContainerRef} className="glass-effect rounded-3xl p-8 max-w-4xl mx-4 relative z-10 w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold marvel-gradient bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-quiz-accent bg-clip-text text-transparent mb-4">
             {getSkillIcon(quiz.selectedSkill)} {getSkillName(quiz.selectedSkill)} Interview Quiz
           </h1>
           <div className="text-white text-lg">
