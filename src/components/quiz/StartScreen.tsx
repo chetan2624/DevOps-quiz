@@ -64,6 +64,14 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
           >
             Blog
           </Button>
+          <Button
+            onClick={() => navigate('/jobs')}
+            variant="outline"
+            size="sm"
+            className="border-primary text-foreground hover:text-primary hover:border-primary hover:bg-primary/10"
+          >
+            Jobs
+          </Button>
           <AuthHeader />
         </div>
       </nav>
