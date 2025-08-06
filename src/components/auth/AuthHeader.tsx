@@ -44,7 +44,7 @@ export const AuthHeader: React.FC = () => {
         variant="ghost"
         size="sm"
         onClick={() => setShowLoginModal(true)}
-        className="text-white hover:bg-white/10"
+        className="text-foreground hover:bg-accent hover:text-accent-foreground border-transparent"
       >
         Login
       </Button>
@@ -52,7 +52,7 @@ export const AuthHeader: React.FC = () => {
         variant="outline"
         size="sm"
         onClick={() => setShowSignupModal(true)}
-        className="text-white border-white hover:bg-white hover:text-gray-900"
+        className="text-foreground border-border hover:bg-accent hover:text-accent-foreground"
       >
         Sign Up
       </Button>

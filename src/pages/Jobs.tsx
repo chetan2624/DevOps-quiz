@@ -801,7 +801,7 @@ Requirements:
           Discover exciting DevOps opportunities in major Indian cities
         </p>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {cities.map((city) => (
             <Card 
               key={city}
@@ -823,7 +823,7 @@ Requirements:
   return (
     <div className="min-h-screen cosmic-gradient">
       {/* Navigation Header */}
-      <nav className="flex justify-between items-center p-6 relative z-10">
+      <nav className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 sm:p-6 relative z-10">
         <Button
           onClick={handleBackToHome}
           variant="ghost"
@@ -839,18 +839,18 @@ Requirements:
         </div>
       </nav>
 
-      <div className="flex min-h-[calc(100vh-88px)]">
+      <div className="flex flex-col lg:flex-row min-h-[calc(100vh-120px)] lg:min-h-[calc(100vh-88px)]">
         {/* Sidebar - only show when city is selected */}
         {selectedCity && !selectedJob && (
-          <div className="w-64 border-r border-border bg-background/50 backdrop-blur-sm">
-            <div className="p-6">
+          <div className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-border bg-background/50 backdrop-blur-sm order-2 lg:order-1">
+            <div className="p-4 sm:p-6">
               <h2 className="font-semibold text-foreground mb-4">Cities</h2>
-              <div className="space-y-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2 lg:space-y-2 lg:space-x-0">
                 {cities.map((city) => (
                   <button
                     key={city}
                     onClick={() => handleCitySelect(city)}
-                    className={`w-full text-left p-3 rounded-lg transition-colors ${
+                    className={`w-full text-left p-3 rounded-lg transition-colors text-sm sm:text-base ${
                       selectedCity === city 
                         ? 'bg-primary text-white' 
                         : 'text-foreground hover:bg-secondary'
@@ -865,10 +865,12 @@ Requirements:
         )}
 
         {/* Main Content */}
-        {selectedJob ? renderJobDetail() :
-         selectedType ? renderJobsList() :
-         selectedCity ? renderJobTypes() :
-         renderCitySelection()}
+        <div className="flex-1 order-1 lg:order-2">
+          {selectedJob ? renderJobDetail() :
+           selectedType ? renderJobsList() :
+           selectedCity ? renderJobTypes() :
+           renderCitySelection()}
+        </div>
       </div>
     </div>
   );

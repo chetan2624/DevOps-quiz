@@ -162,7 +162,7 @@ const MCUQuiz: React.FC = () => {
         <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
         <div className="absolute inset-0 cosmic-gradient opacity-90" />
         
-        <div ref={quizContainerRef} className="glass-effect rounded-3xl p-8 max-w-4xl mx-4 relative z-10 w-full">
+      <div ref={quizContainerRef} className="glass-effect rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-4xl mx-2 sm:mx-4 relative z-10 w-full">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-quiz-accent bg-clip-text text-transparent mb-4">
@@ -241,7 +241,7 @@ const MCUQuiz: React.FC = () => {
       <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
       <div className="absolute inset-0 cosmic-gradient opacity-90" />
       
-      <div ref={quizContainerRef} className="glass-effect rounded-3xl p-8 max-w-4xl mx-4 relative z-10 w-full">
+      <div ref={quizContainerRef} className="glass-effect rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-4xl mx-2 sm:mx-4 relative z-10 w-full">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-quiz-accent bg-clip-text text-transparent mb-4">

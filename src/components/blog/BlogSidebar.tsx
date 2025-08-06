@@ -11,7 +11,7 @@ interface BlogSidebarProps {
 
 export const BlogSidebar: React.FC<BlogSidebarProps> = ({ selectedTopic, onTopicSelect }) => {
   return (
-    <aside className="w-64 flex-shrink-0">
+    <aside className="w-full lg:w-64 flex-shrink-0">
       <Card className="modern-card border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground">

@@ -25,7 +25,7 @@ const Blog = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               <Card 
                 className="modern-card border-border hover:border-quiz-primary/40 transition-all cursor-pointer"
                 onClick={() => setSelectedTopic('sonarqube')}
@@ -74,8 +74,8 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen cosmic-gradient">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center gap-4 mb-8">
+      <div className="mobile-container py-4 sm:py-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 sm:mb-8">
           <Button
             onClick={() => navigate('/')}
             variant="outline"
@@ -85,17 +85,21 @@ const Blog = () => {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Quiz
           </Button>
-          <BookOpen className="h-6 w-6 text-foreground" />
-          <h1 className="text-2xl font-bold text-foreground">DevOps Blog</h1>
+          <div className="flex items-center gap-2">
+            <BookOpen className="h-6 w-6 text-foreground" />
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">DevOps Blog</h1>
+          </div>
         </div>
 
-        <div className="flex gap-8">
-          <BlogSidebar 
-            selectedTopic={selectedTopic}
-            onTopicSelect={setSelectedTopic}
-          />
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          <div className="lg:order-1 order-2">
+            <BlogSidebar 
+              selectedTopic={selectedTopic}
+              onTopicSelect={setSelectedTopic}
+            />
+          </div>
           
-          <main className="flex-1">
+          <main className="flex-1 lg:order-2 order-1">
             {renderContent()}
           </main>
         </div>
