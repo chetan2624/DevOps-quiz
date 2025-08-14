@@ -6,6 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, BookOpen, Server, Container, Settings } from 'lucide-react';
 import { BlogSidebar } from '@/components/blog/BlogSidebar';
 import { SonarQubeGuide } from '@/components/blog/SonarQubeGuide';
+import { KubernetesGuide } from '@/components/blog/KubernetesGuide';
+import { TerraformGuide } from '@/components/blog/TerraformGuide';
+import { JenkinsGuide } from '@/components/blog/JenkinsGuide';
+import { DockerGuide } from '@/components/blog/DockerGuide';
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -15,6 +19,14 @@ const Blog = () => {
     switch (selectedTopic) {
       case 'sonarqube':
         return <SonarQubeGuide />;
+      case 'kubernetes':
+        return <KubernetesGuide />;
+      case 'terraform':
+        return <TerraformGuide />;
+      case 'jenkins':
+        return <JenkinsGuide />;
+      case 'docker':
+        return <DockerGuide />;
       default:
         return (
           <div className="space-y-6">
@@ -43,7 +55,10 @@ const Blog = () => {
                 </CardContent>
               </Card>
 
-              <Card className="modern-card border-border opacity-60">
+              <Card 
+                className="modern-card border-border hover:border-quiz-primary/40 transition-all cursor-pointer"
+                onClick={() => setSelectedTopic('kubernetes')}
+              >
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
                     <Container className="h-5 w-5" />
@@ -51,11 +66,16 @@ const Blog = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">Coming Soon</p>
+                  <p className="text-muted-foreground">
+                    Step-by-step installation of Kubernetes locally and on AWS EC2
+                  </p>
                 </CardContent>
               </Card>
 
-              <Card className="modern-card border-border opacity-60">
+              <Card 
+                className="modern-card border-border hover:border-quiz-primary/40 transition-all cursor-pointer"
+                onClick={() => setSelectedTopic('terraform')}
+              >
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
                     <Settings className="h-5 w-5" />
@@ -63,7 +83,43 @@ const Blog = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">Coming Soon</p>
+                  <p className="text-muted-foreground">
+                    Complete installation guide for Terraform on Linux, macOS, and Windows
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card 
+                className="modern-card border-border hover:border-quiz-primary/40 transition-all cursor-pointer"
+                onClick={() => setSelectedTopic('jenkins')}
+              >
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-foreground">
+                    <Settings className="h-5 w-5" />
+                    Jenkins Installation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Complete step-by-step installation of Jenkins on Ubuntu/Debian systems
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card 
+                className="modern-card border-border hover:border-quiz-primary/40 transition-all cursor-pointer"
+                onClick={() => setSelectedTopic('docker')}
+              >
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-foreground">
+                    <Container className="h-5 w-5" />
+                    Docker Installation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Complete installation guide for Docker on Ubuntu, CentOS, and other Linux distributions
+                  </p>
                 </CardContent>
               </Card>
             </div>
