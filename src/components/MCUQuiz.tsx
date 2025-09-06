@@ -158,74 +158,126 @@ const MCUQuiz: React.FC = () => {
     });
     
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
-        <div className="absolute inset-0 cosmic-gradient opacity-90" />
-        
-      <div ref={quizContainerRef} className="glass-effect rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-4xl mx-2 sm:mx-4 relative z-10 w-full">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-quiz-accent bg-clip-text text-transparent mb-4">
-              🧠 Mere waale questions - Interview Mode
-            </h1>
-            <div className="text-white text-lg">
-              Progress: <span className="text-marvel-gold font-bold">{quiz.score}</span> / {quiz.interviewQuestions.length} 
-              <span className="text-gray-300 ml-4">(Interview Practice)</span>
+      <div className="min-h-screen cosmic-gradient">
+        {/* Top Navigation Bar */}
+        <div className="flex justify-between items-center p-6 border-b border-border/10 backdrop-blur-sm">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={quiz.exitQuiz}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/20 text-muted-foreground hover:text-foreground hover:border-quiz-primary/30 transition-all"
+            >
+              <span>←</span> Exit Interview
+            </button>
+            <div className="text-foreground font-semibold">
+              🧠 Interview Practice
             </div>
           </div>
+          <div className="text-sm text-muted-foreground bg-card/50 rounded-full px-4 py-2 border border-border/20">
+            Question {quiz.currentQuestion + 1} of {quiz.interviewQuestions.length}
+          </div>
+        </div>
 
-          {/* Question Navigation */}
-          <QuestionNavigation
-            currentQuestion={quiz.currentQuestion}
-            totalQuestions={quiz.interviewQuestions.length}
-            userAnswers={interviewAnswers}
-            onJumpToQuestion={quiz.jumpToQuestion}
-            onExit={quiz.exitQuiz}
-          />
-
-          {/* Progress Bar */}
-          <div className="glass-effect rounded-2xl p-4 mb-8">
-            <div className="bg-gray-700 rounded-xl h-6 overflow-hidden relative progress-shimmer">
-              <div
-                ref={progressBarRef}
-                className="h-full bg-gradient-to-r from-marvel-red via-marvel-gold to-marvel-blue rounded-xl"
-                style={{ width: '0%' }}
-              />
+        <div className="mobile-container py-8">
+          {/* Progress Section */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <h1 className="text-2xl font-bold text-foreground">
+                Interview Practice
+              </h1>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-quiz-primary">{quiz.score}</div>
+                <div className="text-sm text-muted-foreground">Score</div>
+              </div>
+            </div>
+            
+            <div className="modern-card rounded-xl p-4">
+              <div className="flex justify-between text-sm text-muted-foreground mb-2">
+                <span>Progress</span>
+                <span>{Math.round(((quiz.currentQuestion + 1) / quiz.interviewQuestions.length) * 100)}%</span>
+              </div>
+              <div className="progress-modern h-3">
+                <div
+                  ref={progressBarRef}
+                  className="progress-bar h-full"
+                  style={{ width: '0%' }}
+                />
+              </div>
             </div>
           </div>
 
           {/* Interview Question */}
-          <InterviewQuestion
-            question={currentQ.question}
-            conditionalQuestion={currentQ.conditionalQuestion}
-            currentAnswer={quiz.currentAnswer}
-            onAnswerChange={quiz.updateCurrentAnswer}
-            onSubmit={quiz.submitTextAnswer}
-            onConditionalSubmit={quiz.submitConditionalAnswer}
-            showConditional={quiz.showConditionalQuestion}
-            answered={quiz.answered}
-            feedback={currentFeedback}
-            questionNumber={quiz.currentQuestion + 1}
-            totalQuestions={quiz.interviewQuestions.length}
-          />
+          <div ref={questionCardRef} className="animate-fade-in">
+            <InterviewQuestion
+              question={currentQ.question}
+              conditionalQuestion={currentQ.conditionalQuestion}
+              currentAnswer={quiz.currentAnswer}
+              onAnswerChange={quiz.updateCurrentAnswer}
+              onSubmit={quiz.submitTextAnswer}
+              onConditionalSubmit={quiz.submitConditionalAnswer}
+              showConditional={quiz.showConditionalQuestion}
+              answered={quiz.answered}
+              feedback={currentFeedback}
+              questionNumber={quiz.currentQuestion + 1}
+              totalQuestions={quiz.interviewQuestions.length}
+            />
+          </div>
 
           {/* Navigation */}
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-4 mt-8">
             <button
               onClick={quiz.prevQuestion}
               disabled={quiz.currentQuestion === 0}
-              className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform transition-all duration-300"
+              className="btn-primary px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all min-w-[120px] border border-border/20 bg-card text-foreground hover:bg-muted"
             >
-              Previous
+              ← Previous
             </button>
             
             <button
               onClick={quiz.nextQuestion}
               disabled={!quiz.answered}
-              className="bg-gradient-to-r from-marvel-red to-marvel-gold text-white font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform transition-all duration-300"
+              className="btn-primary px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all min-w-[120px]"
             >
-              {quiz.currentQuestion === quiz.interviewQuestions.length - 1 ? 'Finish Interview' : 'Next'}
+              {quiz.currentQuestion === quiz.interviewQuestions.length - 1 ? 'Finish Interview →' : 'Next →'}
             </button>
+          </div>
+
+          {/* Question Navigation Grid */}
+          <div className="mt-8 modern-card rounded-xl p-4">
+            <div className="text-sm font-semibold text-foreground mb-3">Question Navigation</div>
+            <div className="grid grid-cols-10 gap-2">
+              {Array.from({ length: quiz.interviewQuestions.length }, (_, index) => {
+                const isAnswered = interviewAnswers[index] !== undefined;
+                const isCurrent = index === quiz.currentQuestion;
+                
+                let buttonClass = "w-8 h-8 rounded-lg text-sm font-semibold transition-all duration-200 ";
+                
+                if (isCurrent) {
+                  buttonClass += "bg-quiz-primary text-primary-foreground border-2 border-quiz-primary";
+                } else if (isAnswered) {
+                  if (interviewAnswers[index] === -1) {
+                    buttonClass += "bg-quiz-error/20 text-quiz-error border border-quiz-error/50";
+                  } else {
+                    buttonClass += "bg-quiz-success/20 text-quiz-success border border-quiz-success/50";
+                  }
+                } else {
+                  buttonClass += "border border-border text-muted-foreground hover:bg-muted hover:text-foreground";
+                }
+                
+                return (
+                  <button
+                    key={index}
+                    onClick={() => quiz.jumpToQuestion(index)}
+                    className={buttonClass}
+                  >
+                    {index + 1}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex justify-between text-xs text-muted-foreground mt-3">
+              <span>Answered: {interviewAnswers.filter(a => a !== undefined).length}</span>
+              <span>Remaining: {quiz.interviewQuestions.length - interviewAnswers.filter(a => a !== undefined).length}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -237,66 +289,78 @@ const MCUQuiz: React.FC = () => {
   const isAnswered = quiz.userAnswers[quiz.currentQuestion] !== undefined;
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
-      <div className="absolute inset-0 cosmic-gradient opacity-90" />
-      
-      <div ref={quizContainerRef} className="glass-effect rounded-2xl sm:rounded-3xl p-4 sm:p-8 max-w-4xl mx-2 sm:mx-4 relative z-10 w-full">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-quiz-accent bg-clip-text text-transparent mb-4">
-            {getSkillIcon(quiz.selectedSkill)} {getSkillName(quiz.selectedSkill)} Interview Quiz
-          </h1>
-          <div className="text-white text-lg">
-            Score: <span className="text-marvel-gold font-bold">{quiz.score}</span> / {quiz.selectedQuestions.length} 
-            <span className="text-gray-300 ml-4">({quiz.testLength} Question Test)</span>
+    <div className="min-h-screen cosmic-gradient">
+      {/* Top Navigation Bar */}
+      <div className="flex justify-between items-center p-6 border-b border-border/10 backdrop-blur-sm">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={quiz.exitQuiz}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/20 text-muted-foreground hover:text-foreground hover:border-quiz-primary/30 transition-all"
+          >
+            <span>←</span> Exit Quiz
+          </button>
+          <div className="text-foreground font-semibold">
+            {getSkillIcon(quiz.selectedSkill)} {getSkillName(quiz.selectedSkill)} Quiz
+          </div>
+        </div>
+        <div className="text-sm text-muted-foreground bg-card/50 rounded-full px-4 py-2 border border-border/20">
+          Question {quiz.currentQuestion + 1} of {quiz.selectedQuestions.length}
+        </div>
+      </div>
+
+      <div className="mobile-container py-8">
+        {/* Progress Section */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold text-foreground">
+              Test Your Knowledge
+            </h1>
+            <div className="text-right">
+              <div className="text-2xl font-bold text-quiz-primary">{quiz.score}</div>
+              <div className="text-sm text-muted-foreground">Score</div>
+            </div>
+          </div>
+          
+          <div className="modern-card rounded-xl p-4">
+            <div className="flex justify-between text-sm text-muted-foreground mb-2">
+              <span>Progress</span>
+              <span>{Math.round(((quiz.currentQuestion + 1) / quiz.selectedQuestions.length) * 100)}%</span>
+            </div>
+            <div className="progress-modern h-3">
+              <div
+                ref={progressBarRef}
+                className="progress-bar h-full"
+                style={{ width: '0%' }}
+              />
+            </div>
           </div>
         </div>
 
-        {/* Question Navigation */}
-        <QuestionNavigation
-          currentQuestion={quiz.currentQuestion}
-          totalQuestions={quiz.selectedQuestions.length}
-          userAnswers={quiz.userAnswers}
-          onJumpToQuestion={quiz.jumpToQuestion}
-          onExit={quiz.exitQuiz}
-        />
-
-        {/* Progress Bar */}
-        <div className="glass-effect rounded-2xl p-4 mb-8">
-          <div className="bg-gray-700 rounded-xl h-6 overflow-hidden relative progress-shimmer">
-            <div
-              ref={progressBarRef}
-              className="h-full bg-gradient-to-r from-marvel-red via-marvel-gold to-marvel-blue rounded-xl"
-              style={{ width: '0%' }}
-            />
-          </div>
-        </div>
-
-        {/* Question Card */}
-        <div ref={questionCardRef} className="glass-effect rounded-2xl p-8 mb-8">
-          <div className="text-marvel-red font-bold text-xl mb-4">
-            Question {quiz.currentQuestion + 1} of {quiz.selectedQuestions.length}
+        {/* Question Section */}
+        <div ref={questionCardRef} className="modern-card rounded-2xl p-6 sm:p-8 mb-8 animate-fade-in">
+          <div className="mb-6">
+            <div className="text-quiz-primary font-semibold text-sm mb-3">
+              Question {quiz.currentQuestion + 1}
+            </div>
+            <h2 className="text-xl sm:text-2xl text-foreground font-semibold leading-relaxed">
+              {currentQ.question}
+            </h2>
           </div>
           
-          <h2 className="text-2xl text-white mb-8 font-medium">
-            {currentQ.question}
-          </h2>
-          
-          <div className="space-y-4 mb-8">
+          <div className="space-y-3 mb-8">
             {currentQ.options.map((option, index) => {
-              let buttonClass = "w-full p-4 text-left rounded-xl border-2 transition-all duration-300 text-white font-medium ";
+              let buttonClass = "w-full p-4 text-left rounded-xl border-2 transition-all duration-200 font-medium relative group ";
               
               if (isAnswered) {
                 if (index === currentQ.correct) {
-                  buttonClass += "bg-green-500/30 border-green-400 text-green-100";
+                  buttonClass += "success-state border-quiz-success bg-quiz-success/10";
                 } else if (index === quiz.userAnswers[quiz.currentQuestion] && index !== currentQ.correct) {
-                  buttonClass += "bg-red-500/30 border-red-400 text-red-100";
+                  buttonClass += "error-state border-quiz-error bg-quiz-error/10";
                 } else {
-                  buttonClass += "glass-effect border-gray-600 text-gray-300";
+                  buttonClass += "border-border text-muted-foreground bg-muted/20";
                 }
               } else {
-                buttonClass += "glass-effect border-gray-600 hover:border-marvel-gold hover:bg-white/10 hover:scale-105";
+                buttonClass += "border-border text-foreground hover:border-quiz-primary hover:bg-quiz-primary/5 hover:scale-[1.02] active:scale-[0.98]";
               }
               
               return (
@@ -306,10 +370,12 @@ const MCUQuiz: React.FC = () => {
                   disabled={isAnswered}
                   className={buttonClass}
                 >
-                  <span className="text-marvel-gold font-bold mr-3">
-                    {String.fromCharCode(65 + index)}.
-                  </span>
-                  {option}
+                  <div className="flex items-start gap-4">
+                    <span className="text-quiz-primary font-bold bg-quiz-secondary rounded-full w-8 h-8 flex items-center justify-center text-sm flex-shrink-0">
+                      {String.fromCharCode(65 + index)}
+                    </span>
+                    <span className="mobile-text leading-relaxed">{option}</span>
+                  </div>
                 </button>
               );
             })}
@@ -317,36 +383,72 @@ const MCUQuiz: React.FC = () => {
           
           {/* Feedback */}
           {isAnswered && (
-            <div className={`p-4 rounded-xl ${
+            <div className={`modern-card rounded-xl p-4 animate-fade-in ${
               quiz.userAnswers[quiz.currentQuestion] === currentQ.correct 
-                ? 'bg-green-500/20 border border-green-400 text-green-100' 
-                : 'bg-red-500/20 border border-red-400 text-red-100'
+                ? 'success-state' 
+                : 'error-state'
             }`}>
-              <div className="font-bold mb-2">
-                {quiz.userAnswers[quiz.currentQuestion] === currentQ.correct ? '🎉 Correct!' : '❌ Incorrect'}
+              <div className="flex items-center gap-2 font-semibold mb-2">
+                {quiz.userAnswers[quiz.currentQuestion] === currentQ.correct ? '✅' : '❌'}
+                {quiz.userAnswers[quiz.currentQuestion] === currentQ.correct ? 'Correct!' : 'Incorrect'}
               </div>
-              <div>{currentQ.explanation}</div>
+              <div className="mobile-text leading-relaxed opacity-90">{currentQ.explanation}</div>
             </div>
           )}
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-4">
           <button
             onClick={quiz.prevQuestion}
             disabled={quiz.currentQuestion === 0}
-            className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform transition-all duration-300"
+            className="btn-primary px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all min-w-[120px] border border-border/20 bg-card text-foreground hover:bg-muted"
           >
-            Previous
+            ← Previous
           </button>
           
           <button
             onClick={quiz.nextQuestion}
             disabled={!isAnswered}
-            className="bg-gradient-to-r from-marvel-red to-marvel-gold text-white font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform transition-all duration-300"
+            className="btn-primary px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all min-w-[120px]"
           >
-            {quiz.currentQuestion === quiz.selectedQuestions.length - 1 ? 'Finish Quiz' : 'Next'}
+            {quiz.currentQuestion === quiz.selectedQuestions.length - 1 ? 'Finish Quiz →' : 'Next →'}
           </button>
+        </div>
+
+        {/* Question Navigation Grid */}
+        <div className="mt-8 modern-card rounded-xl p-4">
+          <div className="text-sm font-semibold text-foreground mb-3">Question Navigation</div>
+          <div className="grid grid-cols-10 gap-2">
+            {Array.from({ length: quiz.selectedQuestions.length }, (_, index) => {
+              const isAnswered = quiz.userAnswers[index] !== undefined;
+              const isCurrent = index === quiz.currentQuestion;
+              
+              let buttonClass = "w-8 h-8 rounded-lg text-sm font-semibold transition-all duration-200 ";
+              
+              if (isCurrent) {
+                buttonClass += "bg-quiz-primary text-primary-foreground border-2 border-quiz-primary";
+              } else if (isAnswered) {
+                buttonClass += "bg-quiz-success/20 text-quiz-success border border-quiz-success/50 hover:bg-quiz-success/30";
+              } else {
+                buttonClass += "border border-border text-muted-foreground hover:bg-muted hover:text-foreground";
+              }
+              
+              return (
+                <button
+                  key={index}
+                  onClick={() => quiz.jumpToQuestion(index)}
+                  className={buttonClass}
+                >
+                  {index + 1}
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex justify-between text-xs text-muted-foreground mt-3">
+            <span>Answered: {quiz.userAnswers.filter(a => a !== undefined).length}</span>
+            <span>Remaining: {quiz.selectedQuestions.length - quiz.userAnswers.filter(a => a !== undefined).length}</span>
+          </div>
         </div>
       </div>
     </div>

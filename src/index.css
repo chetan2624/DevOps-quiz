@@ -184,13 +184,31 @@
   .modern-card {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
   }
   
+  [data-theme="dark"] .modern-card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
   .modern-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+  
+  [data-theme="dark"] .modern-card:hover {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     transform: translateY(-2px);
+  }
+
+  /* Shadow utilities */
+  .shadow-modern {
+    box-shadow: 0 4px 20px rgba(66, 153, 225, 0.15);
+  }
+  
+  .shadow-modern-hover {
+    box-shadow: 0 8px 30px rgba(66, 153, 225, 0.25);
   }
   
   /* Button styles */

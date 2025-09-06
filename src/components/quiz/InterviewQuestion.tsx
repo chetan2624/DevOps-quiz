@@ -59,52 +59,68 @@ const InterviewQuestion: React.FC<InterviewQuestionProps> = ({
   const feedbackInfo = getFeedbackMessage();
 
   return (
-    <div className="glass-effect rounded-2xl p-8 mb-8">
-      <div className="text-marvel-red font-bold text-xl mb-4">
-        Question {questionNumber} of {totalQuestions}
+    <div className="modern-card rounded-2xl p-6 sm:p-8 mb-8">
+      <div className="mb-6">
+        <div className="text-quiz-primary font-semibold text-sm mb-3">
+          Interview Question {questionNumber}
+        </div>
+        <h2 className="text-xl sm:text-2xl text-foreground font-semibold leading-relaxed">
+          {showConditional ? conditionalQuestion : question}
+        </h2>
       </div>
       
-      <h2 className="text-2xl text-white mb-6 font-medium">
-        {showConditional ? conditionalQuestion : question}
-      </h2>
-      
       {showConditional && (
-        <div className="mb-4 p-3 bg-yellow-500/20 border border-yellow-400 rounded-lg">
-          <p className="text-yellow-100 text-sm">
-            🤔 Follow-up question - Your previous answer needs more technical depth. Be specific with concepts and approach.
-          </p>
+        <div className="mb-4 modern-card rounded-xl p-4 border-l-4 border-quiz-warning bg-quiz-warning/5">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-quiz-warning rounded-full flex items-center justify-center text-white text-sm font-bold">!</div>
+            <p className="text-foreground text-sm font-medium">
+              Follow-up question - Your previous answer needs more technical depth. Be specific with concepts and approach.
+            </p>
+          </div>
         </div>
       )}
       
       <div className="mb-6">
+        <label className="block text-sm font-medium text-muted-foreground mb-2">
+          Your Answer (Hinglish is perfectly fine!)
+        </label>
         <Textarea
           value={currentAnswer}
           onChange={(e) => onAnswerChange(e.target.value)}
           placeholder="Type your detailed answer here (minimum 4-5 lines with technical concepts and step-by-step approach)..."
-          className="min-h-[120px] bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-marvel-gold"
+          className="min-h-[120px] bg-muted/50 border-border text-foreground placeholder:text-muted-foreground focus:border-quiz-primary focus:ring-2 focus:ring-quiz-primary/20"
           disabled={answered && !showConditional}
         />
         
-        {!answered && currentAnswer.trim().length < 10 && (
-          <p className="text-gray-400 text-sm mt-2">
-            💡 Tip: Explain the concept clearly with technical terms and step-by-step approach
-          </p>
-        )}
+        <div className="flex justify-between items-center mt-2">
+          <div className="text-xs text-muted-foreground">
+            {currentAnswer.length} characters
+          </div>
+          {!answered && currentAnswer.trim().length < 10 && (
+            <p className="text-quiz-warning text-xs font-medium">
+              💡 Explain concepts clearly with technical terms
+            </p>
+          )}
+        </div>
       </div>
       
       {!answered && (
         <button
           onClick={showConditional ? onConditionalSubmit : onSubmit}
           disabled={!currentAnswer.trim() || currentAnswer.trim().length < 10}
-          className="bg-gradient-to-r from-marvel-red to-marvel-gold text-white font-bold py-3 px-8 rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform transition-all duration-300"
+          className="btn-primary py-3 px-6 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all"
         >
           Submit Answer
         </button>
       )}
       
       {feedbackInfo && (
-        <div className={`p-4 rounded-xl mt-6 ${feedbackInfo.className}`}>
-          <div className="font-bold">{feedbackInfo.message}</div>
+        <div className={`modern-card rounded-xl p-4 mt-6 border-l-4 animate-fade-in ${
+          feedback.includes('correct') 
+            ? 'success-state border-quiz-success' 
+            : 'error-state border-quiz-error'
+        }`}>
+          <div className="font-semibold">{feedbackInfo.message}</div>
         </div>
       )}
     </div>
