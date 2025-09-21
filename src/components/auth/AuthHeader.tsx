@@ -13,14 +13,18 @@ import { SignupModal } from './SignupModal';
 import { User, LogOut } from 'lucide-react';
 
 export const AuthHeader: React.FC = () => {
-  const { user, logout, isLoggedIn } = useAuth();
+  const { user, profile, logout, isLoggedIn, loading } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
 
-  if (isLoggedIn && user) {
+  if (loading) {
+    return <div className="text-white text-sm">Loading...</div>;
+  }
+
+  if (isLoggedIn && user && profile) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-white text-sm">Hi, {user.name}! 👋</span>
+        <span className="text-white text-sm">Hi, {profile.name}! 👋</span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
