@@ -1,4 +1,1 @@
 project_id = "clfmxjavuvebegthvzyy"
-
-[functions.migrate-questions]
-verify_jwt = false

@@ -23,11 +23,11 @@ export const EmailReport: React.FC<EmailReportProps> = ({
   isInterviewMode = false,
   interviewFeedback = []
 }) => {
-  const { user, profile, isLoggedIn } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  if (!isLoggedIn || !user || !profile) {
+  if (!isLoggedIn || !user) {
     return null;
   }
 
@@ -66,7 +66,7 @@ export const EmailReport: React.FC<EmailReportProps> = ({
       
       // EmailJS template parameters
       const templateParams = {
-        to_name: profile.name,
+        to_name: user.name,
         to_email: user.email,
         skill_name: skillName,
         test_score: score,
