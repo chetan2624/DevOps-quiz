@@ -1,7 +1,10 @@
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { EmailReport } from './EmailReport';
+import { Button } from '@/components/ui/button';
+import { Trophy, TrendingUp, AlertCircle, CheckCircle2, ChevronRight } from 'lucide-react';
 
 interface ResultsScreenProps {
   score: number;
@@ -24,25 +27,6 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({
   isInterviewMode = false,
   interviewFeedback = []
 }) => {
-  const particlesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    createParticles();
-  }, []);
-
-  const createParticles = () => {
-    if (particlesRef.current) {
-      for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        particlesRef.current.appendChild(particle);
-      }
-    }
-  };
 
   const getPerformanceMessage = () => {
     const percentage = Math.round((score / totalQuestions) * 100);
@@ -69,73 +53,176 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({
     const failed = interviewFeedback.filter(f => f === 'incorrect' || f === 'conditional_failed').length;
     
     return (
-      <div className="bg-gray-800/50 rounded-xl p-6 mb-6">
-        <h3 className="text-xl font-bold text-white mb-4">Interview Performance Breakdown</h3>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="modern-card rounded-2xl p-6 mb-6"
+      >
+        <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-primary" />
+          Interview Performance Breakdown
+        </h3>
         <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="bg-green-500/20 rounded-lg p-3">
-            <div className="text-2xl font-bold text-green-400">{correct}</div>
-            <div className="text-sm text-green-300">Direct Success</div>
-          </div>
-          <div className="bg-yellow-500/20 rounded-lg p-3">
-            <div className="text-2xl font-bold text-yellow-400">{conditionalCorrect}</div>
-            <div className="text-sm text-yellow-300">Cleared Follow-up</div>
-          </div>
-          <div className="bg-red-500/20 rounded-lg p-3">
-            <div className="text-2xl font-bold text-red-400">{failed}</div>
-            <div className="text-sm text-red-300">Need Improvement</div>
-          </div>
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="bg-quiz-success/10 border border-quiz-success/30 rounded-xl p-4"
+          >
+            <CheckCircle2 className="w-6 h-6 text-quiz-success mx-auto mb-2" />
+            <div className="text-3xl font-bold text-quiz-success mb-1">{correct}</div>
+            <div className="text-xs text-quiz-success/80 font-medium">Direct Success</div>
+          </motion.div>
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="bg-quiz-warning/10 border border-quiz-warning/30 rounded-xl p-4"
+          >
+            <Trophy className="w-6 h-6 text-quiz-warning mx-auto mb-2" />
+            <div className="text-3xl font-bold text-quiz-warning mb-1">{conditionalCorrect}</div>
+            <div className="text-xs text-quiz-warning/80 font-medium">Cleared Follow-up</div>
+          </motion.div>
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="bg-quiz-error/10 border border-quiz-error/30 rounded-xl p-4"
+          >
+            <AlertCircle className="w-6 h-6 text-quiz-error mx-auto mb-2" />
+            <div className="text-3xl font-bold text-quiz-error mb-1">{failed}</div>
+            <div className="text-xs text-quiz-error/80 font-medium">Need Improvement</div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     );
   };
 
   const percentage = Math.round((score / totalQuestions) * 100);
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-hidden cosmic-gradient">
       {/* Auth Header */}
-      <div className="absolute top-4 right-4 z-20">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="absolute top-4 right-4 z-20"
+      >
         <AuthHeader />
-      </div>
+      </motion.div>
       
-      <div ref={particlesRef} className="absolute inset-0 pointer-events-none" />
-      <div className="absolute inset-0 cosmic-gradient opacity-90" />
+      {/* Floating background elements */}
+      <motion.div
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3]
+        }}
+        transition={{ 
+          duration: 8, 
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute top-20 left-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{ 
+          scale: [1.2, 1, 1.2],
+          opacity: [0.3, 0.5, 0.3]
+        }}
+        transition={{ 
+          duration: 10, 
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2
+        }}
+        className="absolute bottom-20 right-20 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
+      />
       
-      <div className="flex-1 flex items-center justify-center">
-        <div className="glass-effect rounded-3xl p-12 max-w-2xl mx-4 text-center relative z-10">
-          <h2 className="text-4xl font-bold text-white mb-8">
+      <div className="flex-1 flex items-center justify-center p-4">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+          className="modern-card rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center relative z-10"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3, type: "spring" }}
+          >
+            <Trophy className="w-16 h-16 text-primary mx-auto mb-4" />
+          </motion.div>
+          
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="text-3xl md:text-4xl font-bold text-foreground mb-6"
+          >
             🎉 {isInterviewMode ? 'Interview Practice' : `${skillName} Quiz`} Complete!
-          </h2>
+          </motion.h2>
           
-          <div className="text-6xl mb-4">
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.5, type: "spring", stiffness: 200 }}
+            className="text-6xl mb-4"
+          >
             {skillIcon}
-          </div>
+          </motion.div>
           
-          <div className="text-8xl font-bold mb-4 marvel-gradient bg-clip-text text-transparent">
-            {score}/{totalQuestions}
-          </div>
-          
-          <div className="text-6xl font-bold mb-6 text-marvel-gold">
-            {percentage}%
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="mb-4"
+          >
+            <div className="text-7xl md:text-8xl font-bold bg-gradient-to-br from-[hsl(var(--gradient-primary-start))] to-[hsl(var(--gradient-primary-end))] bg-clip-text text-transparent mb-2">
+              {score}/{totalQuestions}
+            </div>
+            
+            <motion.div 
+              initial={{ width: 0 }}
+              animate={{ width: `${percentage}%` }}
+              transition={{ duration: 1.5, delay: 0.8, ease: "easeOut" }}
+              className="h-3 bg-gradient-to-r from-[hsl(var(--gradient-primary-start))] to-[hsl(var(--gradient-primary-end))] rounded-full mx-auto mb-4 max-w-md"
+            />
+            
+            <div className="text-5xl md:text-6xl font-bold text-primary mb-2">
+              {percentage}%
+            </div>
+          </motion.div>
           
           {getInterviewStats()}
           
-          <p className="text-2xl text-white mb-8">
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1 }}
+            className="text-xl md:text-2xl text-foreground mb-6 font-medium"
+          >
             {getPerformanceMessage()}
-          </p>
+          </motion.p>
           
-          <div className="text-lg text-gray-300 mb-8">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.1 }}
+            className="text-muted-foreground mb-8 text-sm"
+          >
             Test Length: {testLength} questions
-          </div>
+          </motion.div>
           
-          <div className="flex flex-col gap-4 items-center">
-            <button
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+            className="flex flex-col gap-4 items-center"
+          >
+            <Button
               onClick={onRestart}
-              className="bg-gradient-to-r from-marvel-blue to-marvel-purple text-white font-bold py-4 px-12 rounded-full text-xl hover:scale-105 transform transition-all duration-300 shadow-2xl"
+              size="lg"
+              className="group"
             >
               Try Again
-            </button>
+              <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
             
             <EmailReport
               score={score}
@@ -145,8 +232,8 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({
               isInterviewMode={isInterviewMode}
               interviewFeedback={interviewFeedback}
             />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

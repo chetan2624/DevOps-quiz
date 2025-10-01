@@ -7,87 +7,92 @@
 
 @layer base {
   :root {
-  /* Light theme colors */
-    --background: 0 0% 98%;
-    --foreground: 222.2 84% 4.9%;
+    /* Apple-style Dark Theme - Primary Colors */
+    --background: 222 25% 11%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 15% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 15% 10%;
+    --popover-foreground: 0 0% 100%;
 
     --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 98%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 95%;
-    --secondary-foreground: 222.2 84% 4.9%;
+    --secondary: 220 10% 15%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 10% 18%;
+    --muted-foreground: 215 16% 65%;
 
-    --accent: 210 40% 95%;
-    --accent-foreground: 222.2 84% 4.9%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 220 10% 18%;
+    --input: 220 10% 18%;
     --ring: 217 91% 60%;
 
-    --radius: 12px;
+    --radius: 16px;
 
-    /* Light theme quiz colors */
+    /* Apple-style Gradients & Effects */
+    --gradient-primary-start: 217 91% 60%;
+    --gradient-primary-end: 221 83% 53%;
+    --button-glow: 217 91% 60%;
+    
+    /* Quiz Colors */
     --quiz-primary: 217 91% 60%;
-    --quiz-secondary: 210 40% 95%;
+    --quiz-secondary: 220 10% 15%;
     --quiz-accent: 34 100% 50%;
     --quiz-success: 142 71% 45%;
     --quiz-warning: 38 92% 50%;
     --quiz-error: 0 72% 51%;
     --quiz-gradient-start: 217 91% 60%;
-    --quiz-gradient-end: 225 73% 57%;
+    --quiz-gradient-end: 221 83% 53%;
   }
 
   [data-theme="dark"] {
-    /* Dark theme colors */
-    --background: 220 15% 8%;
-    --foreground: 220 20% 95%;
+    /* Same as root for consistent dark theme */
+    --background: 222 25% 11%;
+    --foreground: 0 0% 100%;
 
-    --card: 220 15% 12%;
-    --card-foreground: 220 20% 95%;
+    --card: 220 15% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 220 15% 12%;
-    --popover-foreground: 220 20% 95%;
+    --popover: 220 15% 10%;
+    --popover-foreground: 0 0% 100%;
 
     --primary: 217 91% 60%;
-    --primary-foreground: 220 20% 95%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 15%;
-    --secondary-foreground: 220 20% 85%;
+    --secondary: 220 10% 15%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 10% 20%;
-    --muted-foreground: 220 15% 65%;
+    --muted: 220 10% 18%;
+    --muted-foreground: 215 16% 65%;
 
-    --accent: 217 91% 25%;
-    --accent-foreground: 217 91% 95%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 220 20% 95%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 10% 25%;
-    --input: 220 10% 25%;
+    --border: 220 10% 18%;
+    --input: 220 10% 18%;
     --ring: 217 91% 60%;
 
     /* Dark theme quiz colors */
     --quiz-primary: 217 91% 60%;
-    --quiz-secondary: 220 15% 15%;
+    --quiz-secondary: 220 10% 15%;
     --quiz-accent: 34 100% 50%;
     --quiz-success: 142 71% 45%;
     --quiz-warning: 38 92% 50%;
     --quiz-error: 0 72% 51%;
     --quiz-gradient-start: 217 91% 60%;
-    --quiz-gradient-end: 225 73% 57%;
+    --quiz-gradient-end: 221 83% 53%;
   }
 }
 
@@ -104,16 +109,16 @@
   }
 
   body {
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--card)) 100%);
+    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
     min-height: 100vh;
   }
 
   [data-theme="light"] body {
-    background: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(0 0% 100%) 100%);
+    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
   }
 
   [data-theme="dark"] body {
-    background: linear-gradient(135deg, hsl(220 15% 8%) 0%, hsl(220 15% 12%) 100%);
+    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
   }
 
   /* Mobile responsive base styles */
@@ -131,17 +136,18 @@
 }
 
 @layer components {
-  /* Theme-aware gradient backgrounds */
+  /* Apple-style gradient backgrounds */
   .cosmic-gradient {
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--card)) 50%, hsl(var(--muted)) 100%);
+    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
+    position: relative;
   }
 
   [data-theme="light"] .cosmic-gradient {
-    background: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(0 0% 100%) 50%, hsl(210 40% 96%) 100%);
+    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
   }
   
   [data-theme="dark"] .cosmic-gradient {
-    background: linear-gradient(135deg, hsl(220 15% 8%) 0%, hsl(220 15% 12%) 50%, hsl(217 91% 10%) 100%);
+    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
   }
 
   /* Mobile responsive utilities */
@@ -180,26 +186,27 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
   
-  /* Modern card styling */
+  /* Apple-style Modern Cards */
   .modern-card {
     background: hsl(var(--card));
     border: 1px solid hsl(var(--border));
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
   }
   
   [data-theme="dark"] .modern-card {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   }
   
   .modern-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transform: scale(1.02);
   }
   
   [data-theme="dark"] .modern-card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    transform: scale(1.02);
   }
 
   /* Shadow utilities */
@@ -211,18 +218,39 @@
     box-shadow: 0 8px 30px rgba(66, 153, 225, 0.25);
   }
   
-  /* Button styles */
+  /* Apple-style Button Gradients */
   .btn-primary {
-    background: hsl(var(--quiz-primary));
+    background: linear-gradient(135deg, hsl(var(--gradient-primary-start)), hsl(var(--gradient-primary-end)));
     color: hsl(var(--primary-foreground));
     border: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, hsl(var(--gradient-primary-start)) 0%, hsl(221 83% 45%) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .btn-primary:hover::before {
+    opacity: 1;
   }
   
   .btn-primary:hover {
-    background: hsl(var(--quiz-primary) / 0.9);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px hsl(var(--quiz-primary) / 0.3);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 20px hsl(var(--button-glow) / 0.4);
+  }
+  
+  .btn-primary:active {
+    transform: translateY(0) scale(0.98);
   }
   
   /* Floating elements animation - NOT STICKY */
