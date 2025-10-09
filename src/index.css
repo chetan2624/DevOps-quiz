@@ -7,24 +7,24 @@
 
 @layer base {
   :root {
-    /* Apple-style Dark Theme - Primary Colors */
-    --background: 222 25% 11%;
-    --foreground: 0 0% 100%;
+    /* Light Theme - Primary Colors */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
-    --card: 220 15% 10%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 220 15% 10%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
     --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 10% 15%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 220 10% 18%;
-    --muted-foreground: 215 16% 65%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
     --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
@@ -32,20 +32,20 @@
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 10% 18%;
-    --input: 220 10% 18%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
     --ring: 217 91% 60%;
 
     --radius: 16px;
 
-    /* Apple-style Gradients & Effects */
+    /* Light Theme Gradients & Effects */
     --gradient-primary-start: 217 91% 60%;
     --gradient-primary-end: 221 83% 53%;
     --button-glow: 217 91% 60%;
     
     /* Quiz Colors */
     --quiz-primary: 217 91% 60%;
-    --quiz-secondary: 220 10% 15%;
+    --quiz-secondary: 210 40% 96%;
     --quiz-accent: 34 100% 50%;
     --quiz-success: 142 71% 45%;
     --quiz-warning: 38 92% 50%;
@@ -55,7 +55,7 @@
   }
 
   [data-theme="dark"] {
-    /* Same as root for consistent dark theme */
+    /* Dark Theme Colors */
     --background: 222 25% 11%;
     --foreground: 0 0% 100%;
 
@@ -101,20 +101,22 @@
     @apply border-border;
   }
 
+  html,
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     line-height: 1.6;
     min-height: 100vh;
+    max-width: 100vw;
   }
 
   body {
-    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
     min-height: 100vh;
   }
 
   [data-theme="light"] body {
-    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
+    background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
   }
 
   [data-theme="dark"] body {
@@ -138,12 +140,12 @@
 @layer components {
   /* Apple-style gradient backgrounds */
   .cosmic-gradient {
-    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
+    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--muted)) 100%);
     position: relative;
   }
 
   [data-theme="light"] .cosmic-gradient {
-    background: linear-gradient(135deg, hsl(222 25% 11%) 0%, hsl(220 15% 10%) 100%);
+    background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
   }
   
   [data-theme="dark"] .cosmic-gradient {

@@ -53,13 +53,13 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
         transition={{ duration: 0.6 }}
         className="flex justify-between items-center p-6 relative z-10"
       >
-        <div className="flex items-center space-x-2">
-          <motion.div 
+        <div className="flex items-center space-x-3">
+          <motion.img
+            src="/favicon.ico"
+            alt="DevOps Quiz Logo"
+            className="w-10 h-10"
             whileHover={{ scale: 1.1, rotate: 5 }}
-            className="w-10 h-10 rounded-2xl flex items-center justify-center bg-gradient-to-br from-[hsl(var(--gradient-primary-start))] to-[hsl(var(--gradient-primary-end))] shadow-[0_4px_14px_hsl(var(--button-glow)/0.4)]"
-          >
-            <Target className="w-6 h-6 text-white" />
-          </motion.div>
+          />
           <span className="text-2xl font-bold text-foreground tracking-tight">DevOps Quiz</span>
         </div>
         

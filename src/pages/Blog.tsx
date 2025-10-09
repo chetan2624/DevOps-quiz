@@ -129,14 +129,14 @@ const Blog = () => {
   };
 
   return (
-    <div className="min-h-screen cosmic-gradient">
+    <div className="min-h-screen cosmic-gradient overflow-x-hidden">
       <div className="mobile-container py-4 sm:py-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 sm:mb-8">
           <Button
             onClick={() => navigate('/')}
             variant="outline"
             size="sm"
-            className="border-quiz-primary text-quiz-primary hover:bg-quiz-primary hover:text-white"
+            className="border-primary/50 text-foreground hover:bg-primary hover:text-primary-foreground transition-all duration-300"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Quiz
@@ -147,15 +147,15 @@ const Blog = () => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-          <div className="lg:order-1 order-2">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 overflow-x-hidden">
+          <div className="lg:order-1 order-2 w-full lg:w-auto">
             <BlogSidebar 
               selectedTopic={selectedTopic}
               onTopicSelect={setSelectedTopic}
             />
           </div>
           
-          <main className="flex-1 lg:order-2 order-1">
+          <main className="flex-1 lg:order-2 order-1 overflow-x-hidden">
             {renderContent()}
           </main>
         </div>

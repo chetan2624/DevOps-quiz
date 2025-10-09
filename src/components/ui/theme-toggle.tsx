@@ -11,10 +11,11 @@ export const ThemeToggle: React.FC = () => {
       variant="outline"
       size="icon"
       onClick={toggleTheme}
-      className="relative w-10 h-10 rounded-full border-primary/20 hover:border-primary hover:bg-primary/10 transition-all duration-300"
+      className="relative w-10 h-10 rounded-full border-border hover:border-primary hover:bg-accent/10 transition-all duration-300"
+      aria-label="Toggle theme"
     >
-      <Sun className={`h-4 w-4 transition-transform duration-300 ${theme === 'dark' ? 'scale-0 rotate-90' : 'scale-100 rotate-0'}`} />
-      <Moon className={`absolute h-4 w-4 transition-transform duration-300 ${theme === 'dark' ? 'scale-100 rotate-0' : 'scale-0 -rotate-90'}`} />
+      <Sun className={`h-[1.2rem] w-[1.2rem] transition-all duration-300 ${theme === 'dark' ? 'rotate-90 scale-0' : 'rotate-0 scale-100'} text-foreground`} />
+      <Moon className={`absolute h-[1.2rem] w-[1.2rem] transition-all duration-300 ${theme === 'dark' ? 'rotate-0 scale-100' : '-rotate-90 scale-0'} text-foreground`} />
       <span className="sr-only">Toggle theme</span>
     </Button>
   );
