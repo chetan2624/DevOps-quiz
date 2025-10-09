@@ -114,7 +114,7 @@ const Blog = () => {
         <Button
           onClick={() => navigate('/')}
           variant="ghost"
-          className="text-foreground hover:text-foreground hover:bg-secondary"
+          className="text-foreground hover:bg-primary hover:text-black"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Quiz

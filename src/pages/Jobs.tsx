@@ -827,7 +827,7 @@ Requirements:
         <Button
           onClick={handleBackToHome}
           variant="ghost"
-          className="text-foreground hover:text-primary"
+          className="text-foreground hover:bg-primary hover:text-black"
         >
           <ArrowLeft className="w-5 h-5 mr-2" />
           Back to Home
