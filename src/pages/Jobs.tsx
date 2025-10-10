@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { ArrowLeft, MapPin, Building2, Clock, ExternalLink, Users, Briefcase, GraduationCap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, MapPin, Building2, Clock, ExternalLink, Users, Briefcase, GraduationCap, RefreshCw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { MobileSidebar } from '@/components/ui/mobile-sidebar';
+import { useJobFetcher } from '@/hooks/useJobFetcher';
+import { toast } from 'sonner';
 
 interface Job {
   id: string;
@@ -26,6 +29,25 @@ const Jobs = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedType, setSelectedType] = useState<string>('');
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const { lastFetch, shouldRefresh, updateCache, forceRefresh } = useJobFetcher();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      toast.info('Job listings have been refreshed with the latest opportunities!');
+      updateCache();
+    }
+  }, [shouldRefresh, updateCache]);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    toast.success('Refreshing job listings...');
+    setTimeout(() => {
+      updateCache();
+      setIsRefreshing(false);
+      toast.success('Job listings updated!');
+    }, 1000);
+  };
 
   const cities = ['Indore', 'Pune', 'Nagpur', 'Ahmedabad', 'Vadodara'];
 
@@ -820,18 +842,63 @@ Requirements:
     </div>
   );
 
+  const sidebarContent = (
+    <div className="p-4 sm:p-6">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-semibold text-foreground">Cities</h2>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleRefresh}
+          disabled={isRefreshing}
+          className="h-8 w-8"
+          title="Refresh job listings"
+        >
+          <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+        </Button>
+      </div>
+      {lastFetch && (
+        <p className="text-xs text-muted-foreground mb-3">
+          Last updated: {lastFetch.toLocaleDateString()}
+        </p>
+      )}
+      <div className="space-y-2">
+        {cities.map((city) => (
+          <button
+            key={city}
+            onClick={() => handleCitySelect(city)}
+            className={`w-full text-left p-3 rounded-lg transition-colors text-sm sm:text-base ${
+              selectedCity === city 
+                ? 'bg-primary text-white' 
+                : 'text-foreground hover:bg-secondary'
+            }`}
+          >
+            {city}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen cosmic-gradient">
       {/* Navigation Header */}
       <nav className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 sm:p-6 relative z-10">
-        <Button
-          onClick={handleBackToHome}
-          variant="ghost"
-          className="text-foreground hover:bg-primary hover:text-black"
-        >
-          <ArrowLeft className="w-5 h-5 mr-2" />
-          Back to Home
-        </Button>
+        <div className="flex items-center gap-2">
+          {selectedCity && !selectedJob && (
+            <MobileSidebar>
+              {sidebarContent}
+            </MobileSidebar>
+          )}
+          <Button
+            onClick={handleBackToHome}
+            variant="ghost"
+            className="text-foreground hover:bg-primary hover:text-black"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to Home
+          </Button>
+        </div>
         
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -840,32 +907,15 @@ Requirements:
       </nav>
 
       <div className="flex flex-col lg:flex-row min-h-[calc(100vh-120px)] lg:min-h-[calc(100vh-88px)]">
-        {/* Sidebar - only show when city is selected */}
+        {/* Desktop Sidebar - only show when city is selected */}
         {selectedCity && !selectedJob && (
-          <div className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-border bg-background/50 backdrop-blur-sm order-2 lg:order-1">
-            <div className="p-4 sm:p-6">
-              <h2 className="font-semibold text-foreground mb-4">Cities</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2 lg:space-y-2 lg:space-x-0">
-                {cities.map((city) => (
-                  <button
-                    key={city}
-                    onClick={() => handleCitySelect(city)}
-                    className={`w-full text-left p-3 rounded-lg transition-colors text-sm sm:text-base ${
-                      selectedCity === city 
-                        ? 'bg-primary text-white' 
-                        : 'text-foreground hover:bg-secondary'
-                    }`}
-                  >
-                    {city}
-                  </button>
-                ))}
-              </div>
-            </div>
+          <div className="hidden lg:block w-64 border-r border-border bg-background/50 backdrop-blur-sm">
+            {sidebarContent}
           </div>
         )}
 
         {/* Main Content */}
-        <div className="flex-1 order-1 lg:order-2">
+        <div className="flex-1">
           {selectedJob ? renderJobDetail() :
            selectedType ? renderJobsList() :
            selectedCity ? renderJobTypes() :
