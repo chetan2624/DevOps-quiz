@@ -1,1 +1,4 @@
 project_id = "clfmxjavuvebegthvzyy"
+
+[functions.fetch-indeed-jobs]
+verify_jwt = false
