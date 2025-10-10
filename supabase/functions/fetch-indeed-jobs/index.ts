@@ -39,12 +39,11 @@ serve(async (req) => {
 
     // Start the Apify actor run
     const runResponse = await fetch(
-      'https://api.apify.com/v2/acts/misceres~indeed-scraper/runs',
+      `https://api.apify.com/v2/acts/misceres~indeed-scraper/runs?token=${APIFY_API_KEY}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${APIFY_API_KEY}`,
         },
         body: JSON.stringify(input),
       }
@@ -53,7 +52,7 @@ serve(async (req) => {
     if (!runResponse.ok) {
       const errorText = await runResponse.text();
       console.error('Apify run failed:', errorText);
-      throw new Error(`Failed to start Apify run: ${runResponse.status}`);
+      throw new Error(`Failed to start Apify run: ${runResponse.status} - ${errorText}`);
     }
 
     const runData = await runResponse.json();
@@ -69,12 +68,7 @@ serve(async (req) => {
       await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
       
       const statusResponse = await fetch(
-        `https://api.apify.com/v2/actor-runs/${runId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${APIFY_API_KEY}`,
-          },
-        }
+        `https://api.apify.com/v2/actor-runs/${runId}?token=${APIFY_API_KEY}`
       );
 
       const statusData = await statusResponse.json();
@@ -90,16 +84,11 @@ serve(async (req) => {
     // Fetch the results
     const datasetId = runData.data.defaultDatasetId;
     const resultsResponse = await fetch(
-      `https://api.apify.com/v2/datasets/${datasetId}/items`,
-      {
-        headers: {
-          'Authorization': `Bearer ${APIFY_API_KEY}`,
-        },
-      }
+      `https://api.apify.com/v2/datasets/${datasetId}/items?token=${APIFY_API_KEY}`
     );
 
     if (!resultsResponse.ok) {
-      throw new Error('Failed to fetch results from Apify');
+      throw new Error(`Failed to fetch results from Apify: ${resultsResponse.status}`);
     }
 
     const jobs = await resultsResponse.json();
