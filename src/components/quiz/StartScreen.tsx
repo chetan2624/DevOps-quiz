@@ -6,6 +6,7 @@ import { AuthHeader } from '@/components/auth/AuthHeader';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Users, Trophy, Clock, ChevronRight, Play, Star, Target, Sparkles, Menu, X } from 'lucide-react';
+import homeBg from '@/assets/home-bg.jpg';
 
 interface StartScreenProps {
   onStartTestSelection: () => void;
@@ -46,7 +47,12 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
   ];
 
   return (
-    <div className="min-h-screen cosmic-gradient">
+    <div className="min-h-screen cosmic-gradient relative">
+      {/* Background Image with Low Opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        style={{ backgroundImage: `url(${homeBg})` }}
+      />
       {/* Navigation Header */}
       <motion.nav 
         initial={{ y: -20, opacity: 0 }}

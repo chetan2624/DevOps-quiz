@@ -7,6 +7,7 @@ import TestSelection from './quiz/TestSelection';
 import ResultsScreen from './quiz/ResultsScreen';
 import QuestionNavigation from './quiz/QuestionNavigation';
 import InterviewQuestion from './quiz/InterviewQuestion';
+import quizBg from '@/assets/quiz-bg.jpg';
 
 const MCUQuiz: React.FC = () => {
   const quiz = useQuiz();
@@ -158,7 +159,12 @@ const MCUQuiz: React.FC = () => {
     });
     
     return (
-      <div className="min-h-screen cosmic-gradient">
+      <div className="min-h-screen cosmic-gradient relative">
+        {/* Background Image with Low Opacity */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+          style={{ backgroundImage: `url(${quizBg})` }}
+        />
         {/* Top Navigation Bar */}
         <div className="flex justify-between items-center p-6 border-b border-border/10 backdrop-blur-sm">
           <div className="flex items-center gap-4">
@@ -289,7 +295,12 @@ const MCUQuiz: React.FC = () => {
   const isAnswered = quiz.userAnswers[quiz.currentQuestion] !== undefined;
 
   return (
-    <div className="min-h-screen cosmic-gradient">
+    <div className="min-h-screen cosmic-gradient relative">
+      {/* Background Image with Low Opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        style={{ backgroundImage: `url(${quizBg})` }}
+      />
       {/* Top Navigation Bar */}
       <div className="flex justify-between items-center p-6 border-b border-border/10 backdrop-blur-sm">
         <div className="flex items-center gap-4">

@@ -20,10 +20,10 @@ export const AuthHeader: React.FC = () => {
   if (isLoggedIn && user) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-white text-sm">Hi, {user.name}! 👋</span>
+        <span className="text-foreground text-sm">Hi, {user.name}! 👋</span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+            <Button variant="ghost" size="icon" className="text-foreground hover:bg-accent">
               <User className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

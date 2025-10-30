@@ -9,6 +9,7 @@ import { TerraformGuide } from '@/components/blog/TerraformGuide';
 import { JenkinsGuide } from '@/components/blog/JenkinsGuide';
 import { DockerGuide } from '@/components/blog/DockerGuide';
 import { MobileSidebar } from '@/components/ui/mobile-sidebar';
+import blogBg from '@/assets/blog-bg.jpg';
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -184,7 +185,12 @@ const Blog = () => {
   );
 
   return (
-    <div className="min-h-screen cosmic-gradient overflow-x-hidden">
+    <div className="min-h-screen cosmic-gradient overflow-x-hidden relative">
+      {/* Background Image with Low Opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        style={{ backgroundImage: `url(${blogBg})` }}
+      />
       {/* Navigation Header */}
       <nav className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 sm:p-6 relative z-10">
         <div className="flex items-center gap-2">

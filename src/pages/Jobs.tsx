@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { MobileSidebar } from '@/components/ui/mobile-sidebar';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import jobsBg from '@/assets/jobs-bg.jpg';
 
 interface Job {
   id: string;
@@ -358,7 +359,12 @@ const Jobs = () => {
   );
 
   return (
-    <div className="min-h-screen cosmic-gradient">
+    <div className="min-h-screen cosmic-gradient relative">
+      {/* Background Image with Low Opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        style={{ backgroundImage: `url(${jobsBg})` }}
+      />
       {/* Navigation Header */}
       <nav className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 sm:p-6 relative z-10">
         <div className="flex items-center gap-2">
