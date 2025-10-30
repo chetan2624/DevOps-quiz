@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "rounded-full bg-gradient-to-br from-[hsl(var(--gradient-primary-start))] to-[hsl(var(--gradient-primary-end))] text-primary-foreground hover:shadow-[0_4px_20px_hsl(var(--button-glow)/0.4)] hover:scale-[1.02] active:scale-[0.98]",
+        default: "rounded-full bg-gradient-to-br from-[hsl(var(--gradient-primary-start))] to-[hsl(var(--gradient-primary-end))] text-primary-foreground hover:text-white hover:shadow-[0_4px_20px_hsl(var(--button-glow)/0.4)] hover:scale-[1.02] active:scale-[0.98]",
         destructive:
-          "rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:shadow-lg",
+          "rounded-full bg-destructive text-destructive-foreground hover:text-white hover:bg-destructive/90 hover:shadow-lg",
         outline:
-          "rounded-full border-2 border-primary/30 bg-transparent text-foreground hover:bg-primary/10 hover:border-primary hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]",
+          "rounded-full border-2 border-primary/30 bg-transparent text-foreground hover:text-white hover:bg-primary/10 hover:border-primary hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]",
         secondary:
-          "rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-lg",
-        ghost: "rounded-full hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "rounded-full bg-secondary text-secondary-foreground hover:text-white hover:bg-secondary/80 hover:shadow-lg",
+        ghost: "rounded-full hover:bg-accent hover:text-white",
+        link: "text-primary underline-offset-4 hover:underline hover:text-white",
       },
       size: {
         default: "h-12 px-6 py-3",

@@ -42,6 +42,31 @@ const shuffleArray = (array: Question[]): Question[] => {
   return shuffled;
 };
 
+// Shuffle answer options for a question while keeping track of correct answer
+const shuffleQuestionOptions = (question: Question): Question => {
+  const optionsWithIndices = question.options.map((option, index) => ({
+    option,
+    originalIndex: index,
+  }));
+  
+  // Fisher-Yates shuffle
+  for (let i = optionsWithIndices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [optionsWithIndices[i], optionsWithIndices[j]] = [optionsWithIndices[j], optionsWithIndices[i]];
+  }
+  
+  // Find new index of correct answer
+  const newCorrectIndex = optionsWithIndices.findIndex(
+    item => item.originalIndex === question.correct
+  );
+  
+  return {
+    ...question,
+    options: optionsWithIndices.map(item => item.option),
+    correct: newCorrectIndex,
+  };
+};
+
 const shuffleInterviewQuestions = (array: InterviewQuestion[]): InterviewQuestion[] => {
   const shuffled = [...array];
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -259,7 +284,7 @@ export const useQuiz = () => {
     // Regular MCQ mode
     const allQuestions = getQuestionsBySkill(quizState.selectedSkill);
     const shuffledQuestions = shuffleArray(allQuestions);
-    const selectedQuestions = shuffledQuestions.slice(0, length);
+    const selectedQuestions = shuffledQuestions.slice(0, length).map(q => shuffleQuestionOptions(q));
     
     setQuizState(prev => ({
       ...prev,
