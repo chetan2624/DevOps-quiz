@@ -1,16 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Terminal, Download, Settings, Globe, Container, Shield } from 'lucide-react';
+import { CodeBlock } from './CodeBlock';
 
 export const DockerGuide: React.FC = () => {
-  const CodeBlock: React.FC<{ children: React.ReactNode; description: string }> = ({ children, description }) => (
-    <div className="mb-6">
-      <p className="text-muted-foreground mb-2">{description}</p>
-      <pre className="bg-muted border border-border rounded-lg p-4 overflow-x-auto">
-        <code className="text-primary text-sm">{children}</code>
-      </pre>
-    </div>
-  );
 
   return (
     <div className="space-y-8">

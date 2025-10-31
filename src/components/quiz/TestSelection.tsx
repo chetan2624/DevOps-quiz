@@ -57,7 +57,7 @@ const TestSelection: React.FC<TestSelectionProps> = ({
         <Button
           variant="ghost"
           onClick={onBack}
-          className="group"
+          className="group text-foreground"
         >
           <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
           Back to Skills

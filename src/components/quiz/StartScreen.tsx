@@ -87,6 +87,13 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
           >
             Jobs
           </Button>
+          <Button
+            onClick={() => navigate('/guide')}
+            variant="outline"
+            size="sm"
+          >
+            Guide
+          </Button>
           <AuthHeader />
         </div>
 
@@ -136,6 +143,17 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
                 className="w-full max-w-xs"
               >
                 Jobs
+              </Button>
+              <Button
+                onClick={() => {
+                  navigate('/guide');
+                  setMobileMenuOpen(false);
+                }}
+                variant="outline"
+                size="lg"
+                className="w-full max-w-xs"
+              >
+                Guide
               </Button>
               <div className="w-full max-w-xs">
                 <AuthHeader />
