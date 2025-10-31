@@ -50,7 +50,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
     <div className="min-h-screen cosmic-gradient relative">
       {/* Background Image with Low Opacity */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 dark:opacity-15 pointer-events-none"
         style={{ backgroundImage: `url(${homeBg})` }}
       />
       {/* Navigation Header */}

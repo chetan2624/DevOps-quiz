@@ -188,7 +188,7 @@ const Blog = () => {
     <div className="min-h-screen cosmic-gradient overflow-x-hidden relative">
       {/* Background Image with Low Opacity */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-10 pointer-events-none"
         style={{ backgroundImage: `url(${blogBg})` }}
       />
       {/* Navigation Header */}

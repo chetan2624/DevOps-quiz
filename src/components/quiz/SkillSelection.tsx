@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Skill } from '@/types/quiz';
 import { Button } from '@/components/ui/button'; 
 import { ArrowLeft, Users, Target, Zap, Sparkles } from 'lucide-react';
+import skillBg from '@/assets/skill-selection-bg.jpg';
 
 interface SkillSelectionProps {
   onSelectSkill: (skillId: string) => void;
@@ -83,13 +84,18 @@ const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack, 
   };
 
   return (
-    <div className="min-h-screen cosmic-gradient">
+    <div className="min-h-screen cosmic-gradient relative">
+      {/* Background Image with Low Opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-10 pointer-events-none"
+        style={{ backgroundImage: `url(${skillBg})` }}
+      />
       {/* Navigation Header */}
       <motion.nav 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="flex justify-between items-center p-6"
+        className="flex justify-between items-center p-6 relative z-10"
       >
         <Button
           variant="ghost"
@@ -101,7 +107,7 @@ const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack, 
         </Button>
       </motion.nav>
 
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-6 py-12 relative z-10">
         {/* Header Section */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
