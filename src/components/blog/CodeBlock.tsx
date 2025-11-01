@@ -25,13 +25,13 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ children, description, id 
 
   return (
     <div className="mb-6">
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-muted-foreground text-sm md:text-base">{description}</p>
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <p className="text-muted-foreground text-sm md:text-base flex-1">{description}</p>
         <Button
           variant="ghost"
           size="sm"
           onClick={copyToClipboard}
-          className="shrink-0"
+          className="shrink-0 h-8 w-8 p-0 md:h-9 md:w-auto md:px-3"
         >
           {copied ? (
             <Check className="w-4 h-4 text-green-500" />
@@ -40,8 +40,8 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ children, description, id 
           )}
         </Button>
       </div>
-      <pre className="bg-muted border border-border rounded-lg p-4 overflow-x-auto">
-        <code className="text-primary text-sm">{children}</code>
+      <pre className="bg-muted border border-border rounded-lg p-3 md:p-4 overflow-x-auto">
+        <code className="text-primary text-xs md:text-sm break-all">{children}</code>
       </pre>
     </div>
   );

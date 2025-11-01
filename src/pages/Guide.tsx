@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, BookOpen, Code2, Shield, Youtube, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import guideBg from '@/assets/guide-bg.jpg';
+import guideBg from '@/assets/guide-cards-bg.jpg';
 import TutorialGuide from '@/components/guide/TutorialGuide';
 import PracticeGuide from '@/components/guide/PracticeGuide';
 import UnderstandGuide from '@/components/guide/UnderstandGuide';
