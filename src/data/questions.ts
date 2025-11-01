@@ -1,4 +1,5 @@
 import { Question } from '@/types/quiz';
+import { allPythonQuestions } from './pythonQuestions';
 
 export const allQuestions: Question[] = [
   {

@@ -8,6 +8,7 @@ import { allKubernetesQuestions } from '@/data/kubernetesQuestions';
 import { allTerraformQuestions } from '@/data/terraformQuestions';
 import { allJenkinsQuestions } from '@/data/jenkinsQuestions';
 import { allDatadogQuestions } from '@/data/datadogQuestions';
+import { allPythonQuestions } from '@/data/pythonQuestions';
 import { allInterviewQuestions } from '@/data/interviewQuestions';
 
 const getQuestionsBySkill = (skillId: string): Question[] => {
@@ -28,6 +29,8 @@ const getQuestionsBySkill = (skillId: string): Question[] => {
       return allJenkinsQuestions;
     case 'datadog':
       return allDatadogQuestions;
+    case 'python':
+      return allPythonQuestions;
     default:
       return selectQuestions(100); // Fallback to Linux questions
   }

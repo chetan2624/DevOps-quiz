@@ -26,8 +26,8 @@ const TestSelection: React.FC<TestSelectionProps> = ({
       description: "Foundation concepts with clear explanations",
       details: "Perfect for beginners and quick revision",
       icon: Zap,
-      color: "from-green-500 to-emerald-600",
-      bgGradient: "from-green-500/20 to-emerald-600/20",
+      iconColor: "text-green-500",
+      buttonClass: "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700",
       recommended: false
     },
     {
@@ -36,8 +36,8 @@ const TestSelection: React.FC<TestSelectionProps> = ({
       description: "Advanced topics and tricky scenarios",
       details: "Challenge yourself with complex questions",
       icon: Target,
-      color: "from-yellow-500 to-orange-600",
-      bgGradient: "from-yellow-500/20 to-orange-600/20",
+      iconColor: "text-orange-500",
+      buttonClass: "bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700",
       recommended: true
     },
     {
@@ -46,8 +46,8 @@ const TestSelection: React.FC<TestSelectionProps> = ({
       description: "Real-world scenarios and multi-skill problems",
       details: "Expert level for 1-2 years experience",
       icon: Flame,
-      color: "from-red-500 to-pink-600",
-      bgGradient: "from-red-500/20 to-pink-600/20",
+      iconColor: "text-red-500",
+      buttonClass: "bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700",
       recommended: false
     }
   ];
@@ -116,8 +116,8 @@ const TestSelection: React.FC<TestSelectionProps> = ({
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -8 }}
-              className="modern-card rounded-3xl p-8 text-center cursor-pointer relative group overflow-hidden"
+              whileHover={{ scale: 1.02 }}
+              className="modern-card rounded-3xl p-8 text-center cursor-pointer relative group"
               onClick={() => onSelectTest(option.difficulty)}
             >
               {option.recommended && (
@@ -134,18 +134,16 @@ const TestSelection: React.FC<TestSelectionProps> = ({
                 </motion.div>
               )}
               
-              <div className={`absolute inset-0 bg-gradient-to-br ${option.bgGradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity`} />
-              
               <div className="relative z-10">
                 <motion.div
                   whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
                   transition={{ duration: 0.5 }}
-                  className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br ${option.bgGradient}`}
+                  className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 bg-muted"
                 >
-                  <option.icon className={`w-10 h-10 bg-gradient-to-br ${option.color} bg-clip-text text-transparent`} style={{ WebkitTextFillColor: 'transparent', WebkitBackgroundClip: 'text' }} />
+                  <option.icon className={`w-10 h-10 ${option.iconColor}`} />
                 </motion.div>
                 
-                <h3 className={`text-3xl font-bold bg-gradient-to-br ${option.color} bg-clip-text text-transparent mb-2`}>
+                <h3 className={`text-3xl font-bold ${option.iconColor} mb-2`}>
                   {option.title}
                 </h3>
                 
@@ -163,7 +161,7 @@ const TestSelection: React.FC<TestSelectionProps> = ({
                 </div>
                 
                 <Button 
-                  className={`w-full bg-gradient-to-r ${option.color} hover:opacity-90 text-white border-0`}
+                  className={`w-full ${option.buttonClass} text-white border-0 shadow-lg`}
                   size="lg"
                   onClick={(e) => {
                     e.stopPropagation();

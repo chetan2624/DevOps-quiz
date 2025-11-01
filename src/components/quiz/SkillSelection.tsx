@@ -74,7 +74,7 @@ const skills: Skill[] = [
     name: 'Python',
     icon: '🐍',
     description: 'Python programming fundamentals, scripting, and automation',
-    questionCount: 100
+    questionCount: 90
   },
   {
     id: 'shell',
