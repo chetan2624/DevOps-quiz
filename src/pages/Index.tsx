@@ -1,8 +1,10 @@
-
-import MCUQuiz from "@/components/MCUQuiz";
+import StartScreen from "@/components/quiz/StartScreen";
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
-  return <MCUQuiz />;
+  const navigate = useNavigate();
+  
+  return <StartScreen onStartTestSelection={() => navigate('/skills')} />;
 };
 
 export default Index;

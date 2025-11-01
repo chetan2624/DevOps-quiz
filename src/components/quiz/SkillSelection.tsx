@@ -70,6 +70,37 @@ const skills: Skill[] = [
     questionCount: 100
   },
   {
+    id: 'python',
+    name: 'Python',
+    icon: '🐍',
+    description: 'Python programming fundamentals, scripting, and automation',
+    questionCount: 100
+  },
+  {
+    id: 'shell',
+    name: 'Shell Scripting',
+    icon: '📜',
+    description: 'Bash scripting, automation, and command-line tools',
+    questionCount: 100,
+    comingSoon: true
+  },
+  {
+    id: 'grafana',
+    name: 'Grafana & Prometheus',
+    icon: '📈',
+    description: 'Monitoring, metrics, dashboards, and alerting',
+    questionCount: 100,
+    comingSoon: true
+  },
+  {
+    id: 'azure',
+    name: 'Azure',
+    icon: '🔷',
+    description: 'Microsoft Azure cloud services and infrastructure',
+    questionCount: 100,
+    comingSoon: true
+  },
+  {
     id: 'interview',
     name: 'Interview Practice',
     icon: '🧠',
@@ -153,22 +184,30 @@ const SkillSelection: React.FC<SkillSelectionProps> = ({ onSelectSkill, onBack, 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 + index * 0.05 }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="modern-card rounded-2xl p-6 cursor-pointer group relative overflow-hidden"
-              onClick={() => onSelectSkill(skill.id)}
+              whileHover={skill.comingSoon ? {} : { scale: 1.05, y: -5 }}
+              className={`modern-card rounded-2xl p-6 ${skill.comingSoon ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} group relative overflow-hidden ${skill.comingSoon ? 'blur-[2px]' : ''}`}
+              onClick={() => !skill.comingSoon && onSelectSkill(skill.id)}
             >
+              {skill.comingSoon && (
+                <div className="absolute inset-0 flex items-center justify-center z-20 backdrop-blur-sm">
+                  <div className="bg-background/90 border-2 border-primary rounded-xl px-6 py-3 shadow-2xl">
+                    <span className="text-primary font-bold text-lg">Coming Soon</span>
+                  </div>
+                </div>
+              )}
+              
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
               
               <div className="relative z-10 text-center">
                 <motion.div
-                  whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
+                  whileHover={skill.comingSoon ? {} : { rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
                   transition={{ duration: 0.5 }}
                   className="text-5xl mb-4"
                 >
                   {skill.icon}
                 </motion.div>
                 
-                <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                <h3 className={`text-xl font-bold text-foreground mb-2 ${!skill.comingSoon && 'group-hover:text-primary'} transition-colors`}>
                   {skill.name}
                 </h3>
                 

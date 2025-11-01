@@ -9,12 +9,45 @@ import QuestionNavigation from './quiz/QuestionNavigation';
 import InterviewQuestion from './quiz/InterviewQuestion';
 import quizBg from '@/assets/quiz-bg-new.jpg';
 
-const MCUQuiz: React.FC = () => {
+interface MCUQuizProps {
+  initialSkill?: string;
+  initialDifficulty?: 'easy' | 'medium' | 'hard';
+  isInterviewMode?: boolean;
+  onExit?: () => void;
+}
+
+const MCUQuiz: React.FC<MCUQuizProps> = ({ 
+  initialSkill, 
+  initialDifficulty, 
+  isInterviewMode: initialIsInterviewMode,
+  onExit 
+}) => {
   const quiz = useQuiz();
   const quizContainerRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const questionCardRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
+
+  // Initialize quiz from props
+  useEffect(() => {
+    if (initialSkill && initialDifficulty && !quiz.quizStarted) {
+      quiz.selectSkill(initialSkill);
+      setTimeout(() => {
+        quiz.selectTest(initialDifficulty);
+      }, 100);
+    } else if (initialIsInterviewMode && !quiz.quizStarted) {
+      quiz.selectSkill('interview');
+    }
+  }, [initialSkill, initialDifficulty, initialIsInterviewMode]);
+
+  // Handle exit
+  const handleExitClick = () => {
+    if (onExit) {
+      onExit();
+    } else {
+      quiz.exitQuiz();
+    }
+  };
 
   useEffect(() => {
     if (quiz.quizStarted) {
@@ -123,6 +156,7 @@ const MCUQuiz: React.FC = () => {
         onBack={quiz.backToSkillSelection}
         skillName={getSkillName(quiz.selectedSkill)}
         skillIcon={getSkillIcon(quiz.selectedSkill)}
+        selectedSkill={quiz.selectedSkill || undefined}
       />
     );
   }

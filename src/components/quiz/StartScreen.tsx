@@ -19,18 +19,18 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
   const features = [
     {
       icon: BookOpen,
-      title: "8 DevOps Skills", 
-      description: "Linux, AWS, GitHub, Docker, Kubernetes, Terraform, Jenkins, DataDog"
+      title: "10+ DevOps Skills", 
+      description: "Linux, AWS, GitHub, Docker, Kubernetes, Terraform, Jenkins, DataDog, Python & More"
     },
     {
       icon: Users,
       title: "100+ Questions", 
-      description: "Comprehensive interview questions per skill"
+      description: "Multiple difficulty levels with comprehensive questions"
     },
     {
       icon: Clock,
-      title: "Flexible Tests", 
-      description: "Choose 20, 30, or 50 questions based on your time"
+      title: "3 Difficulty Levels", 
+      description: "Easy, Medium, and Hard - 20 questions each"
     },
     {
       icon: Trophy,
@@ -40,9 +40,9 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
   ];
 
   const stats = [
-    { number: "1000+", label: "Questions Available" },
-    { number: "8", label: "DevOps Skills" },
-    { number: "95%", label: "Success Rate" },
+    { number: "1500+", label: "Questions Available" },
+    { number: "10+", label: "DevOps Skills" },
+    { number: "3", label: "Difficulty Levels" },
     { number: "24/7", label: "Available" }
   ];
 
@@ -214,7 +214,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartTestSelection }) => {
             transition={{ duration: 0.8, delay: 0.7 }}
           >
             <Button
-              onClick={onStartTestSelection}
+              onClick={() => navigate('/skills')}
               size="lg"
               className="group"
             >

@@ -1,9 +1,12 @@
 
+export type DifficultyLevel = 'easy' | 'medium' | 'hard';
+
 export interface Question {
   question: string;
   options: string[];
   correct: number;
   explanation: string;
+  difficulty?: DifficultyLevel;
 }
 
 export interface InterviewQuestion {
@@ -27,6 +30,7 @@ export interface QuizState {
   showTestSelection: boolean;
   showSkillSelection: boolean;
   selectedSkill: string | null;
+  selectedDifficulty: DifficultyLevel | null;
   // Interview mode specific
   isInterviewMode: boolean;
   interviewQuestions: InterviewQuestion[];
@@ -43,4 +47,5 @@ export interface Skill {
   icon: string;
   description: string;
   questionCount: number | string;
+  comingSoon?: boolean;
 }

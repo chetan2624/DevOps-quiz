@@ -236,6 +236,7 @@ export const useQuiz = () => {
     showTestSelection: false,
     showSkillSelection: false,
     selectedSkill: null,
+    selectedDifficulty: null,
     // Interview mode
     isInterviewMode: false,
     interviewQuestions: [],
@@ -278,18 +279,21 @@ export const useQuiz = () => {
     }
   };
 
-  const selectTest = (length: number) => {
+  const selectTest = (difficulty: 'easy' | 'medium' | 'hard') => {
     if (!quizState.selectedSkill) return;
     
     // Regular MCQ mode
     const allQuestions = getQuestionsBySkill(quizState.selectedSkill);
-    const shuffledQuestions = shuffleArray(allQuestions);
-    const selectedQuestions = shuffledQuestions.slice(0, length).map(q => shuffleQuestionOptions(q));
+    // Filter by difficulty if questions have difficulty property, otherwise use all
+    const filteredQuestions = allQuestions.filter(q => !q.difficulty || q.difficulty === difficulty);
+    const shuffledQuestions = shuffleArray(filteredQuestions);
+    const selectedQuestions = shuffledQuestions.slice(0, 20).map(q => shuffleQuestionOptions(q));
     
     setQuizState(prev => ({
       ...prev,
-      testLength: length,
+      testLength: 20,
       selectedQuestions,
+      selectedDifficulty: difficulty,
       showTestSelection: false,
       quizStarted: true,
       isInterviewMode: false,
@@ -451,6 +455,7 @@ export const useQuiz = () => {
       showTestSelection: false,
       showSkillSelection: true,
       selectedSkill: null,
+      selectedDifficulty: null,
       isInterviewMode: false,
       interviewQuestions: [],
       userTextAnswers: [],
@@ -474,6 +479,7 @@ export const useQuiz = () => {
       showTestSelection: false,
       showSkillSelection: false,
       selectedSkill: null,
+      selectedDifficulty: null,
       isInterviewMode: false,
       interviewQuestions: [],
       userTextAnswers: [],
